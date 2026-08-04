@@ -25,13 +25,19 @@ import {
   DollarSign, 
   FileSpreadsheet, 
   Download, 
-  Filter 
+  Filter,
+  Edit,
+  Trash2,
+  Search,
+  Receipt
 } from 'lucide-react';
 import { SaleTransaction, AdminSettings, ProductCategory } from '../types';
 
 interface SalesAnalyticsProps {
   transactions: SaleTransaction[];
   settings: AdminSettings;
+  onOpenEditSaleModal?: (transaction: SaleTransaction) => void;
+  onDeleteTransaction?: (transactionId: string) => void;
 }
 
 const CATEGORY_COLORS: Record<ProductCategory, string> = {
@@ -49,10 +55,14 @@ const MONTH_NAMES = [
 export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
   transactions,
   settings,
+  onOpenEditSaleModal,
+  onDeleteTransaction,
 }) => {
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState<number | 'all'>('all');
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
+  const [saleSearch, setSaleSearch] = useState('');
+  const [showAllList, setShowAllList] = useState(false);
 
   // Available years in transactions
   const availableYears = useMemo(() => {
@@ -170,6 +180,20 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
       .sort((a, b) => b.totalSales - a.totalSales)
       .slice(0, 6);
   }, [filteredTransactions, selectedCategory]);
+
+  // Search filtered list for table view
+  const searchedTransactions = useMemo(() => {
+    if (!saleSearch.trim()) return filteredTransactions;
+    const term = saleSearch.toLowerCase();
+    return filteredTransactions.filter(t => 
+      t.billNumber.toLowerCase().includes(term) ||
+      (t.customerName && t.customerName.toLowerCase().includes(term)) ||
+      (t.customerPhone && t.customerPhone.includes(term)) ||
+      t.items.some(i => i.productName.toLowerCase().includes(term))
+    );
+  }, [filteredTransactions, saleSearch]);
+
+  const displayedTransactionsList = showAllList ? searchedTransactions : searchedTransactions.slice(0, 30);
 
   // Export CSV Handler
   const exportToCSV = () => {
@@ -430,6 +454,123 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Sales Transactions & Edit Table for Selected Year */}
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div>
+            <div className="flex items-center space-x-2">
+              <Receipt className="w-5 h-5 text-emerald-400" />
+              <h3 className="font-extrabold text-slate-100 text-base">
+                Sales Records & Edit Options ({selectedYear})
+              </h3>
+            </div>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Select or edit past sale records for Year {selectedYear}
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <div className="relative">
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                value={saleSearch}
+                onChange={(e) => setSaleSearch(e.target.value)}
+                placeholder="Search Bill # or Customer..."
+                className="bg-slate-800 border border-slate-700 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            {searchedTransactions.length > 30 && (
+              <button
+                onClick={() => setShowAllList(!showAllList)}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 rounded-xl text-xs font-bold transition-colors whitespace-nowrap"
+              >
+                {showAllList ? 'Show Top 30' : `Show All (${searchedTransactions.length})`}
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs text-slate-300">
+            <thead className="bg-slate-800/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-700">
+              <tr>
+                <th className="py-3 px-4">Bill No & Date</th>
+                <th className="py-3 px-4">Customer</th>
+                <th className="py-3 px-4">Items Summary</th>
+                <th className="py-3 px-4">Payment</th>
+                <th className="py-3 px-4">Total</th>
+                <th className="py-3 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-800">
+              {displayedTransactionsList.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-slate-500 font-medium">
+                    No sales records found for Year {selectedYear}.
+                  </td>
+                </tr>
+              ) : (
+                displayedTransactionsList.map((tx) => (
+                  <tr key={tx.id} className="hover:bg-slate-800/40 transition-colors">
+                    <td className="py-3 px-4 font-bold text-slate-100">
+                      <div className="font-mono text-emerald-400">{tx.billNumber}</div>
+                      <div className="text-[10px] text-slate-400">{tx.date}</div>
+                    </td>
+
+                    <td className="py-3 px-4">
+                      <div className="font-bold text-slate-200">{tx.customerName || 'Walk-in'}</div>
+                      <div className="text-[10px] text-slate-500">{tx.customerPhone || ''}</div>
+                    </td>
+
+                    <td className="py-3 px-4">
+                      <div className="text-slate-300 font-medium line-clamp-2">
+                        {tx.items.map(i => `${i.productName} (x${i.quantity})`).join(', ')}
+                      </div>
+                    </td>
+
+                    <td className="py-3 px-4">
+                      <span className="bg-slate-800 px-2 py-0.5 rounded border border-slate-700 text-[10px] font-bold">
+                        {tx.paymentMethod}
+                      </span>
+                    </td>
+
+                    <td className="py-3 px-4 font-extrabold text-emerald-400 text-sm">
+                      {settings.currencySymbol}{tx.totalAmount.toLocaleString()}
+                    </td>
+
+                    <td className="py-3 px-4 text-right space-x-2 whitespace-nowrap">
+                      {onOpenEditSaleModal && (
+                        <button
+                          onClick={() => onOpenEditSaleModal(tx)}
+                          className="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-300 border border-emerald-500/30 rounded text-xs font-bold inline-flex items-center space-x-1 transition-colors"
+                        >
+                          <Edit className="w-3 h-3" />
+                          <span>Edit</span>
+                        </button>
+                      )}
+                      {onDeleteTransaction && (
+                        <button
+                          onClick={() => {
+                            if (confirm(`Delete sale bill ${tx.billNumber}?`)) {
+                              onDeleteTransaction(tx.id);
+                            }
+                          }}
+                          className="px-2 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded text-xs font-bold inline-flex items-center space-x-1 transition-colors"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          <span>Delete</span>
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 

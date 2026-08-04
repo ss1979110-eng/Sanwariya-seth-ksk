@@ -278,6 +278,21 @@ export default function App() {
           <SalesAnalytics
             transactions={transactions}
             settings={settings}
+            onOpenEditSaleModal={(tx) => {
+              if (!isAdmin) {
+                setIsAdminLoginOpen(true);
+              } else {
+                setSaleToEdit(tx);
+                setIsSaleModalOpen(true);
+              }
+            }}
+            onDeleteTransaction={(txId) => {
+              if (!isAdmin) {
+                setIsAdminLoginOpen(true);
+              } else {
+                handleDeleteTransaction(txId);
+              }
+            }}
           />
         )}
 
