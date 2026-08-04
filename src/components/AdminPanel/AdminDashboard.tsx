@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, 
   Plus, 
@@ -28,6 +28,7 @@ interface AdminDashboardProps {
   transactions: SaleTransaction[];
   settings: AdminSettings;
   onUpdateProduct: (product: Product) => void;
+  onSaveProductDirectly: (product: Product) => void;
   onDeleteProduct: (productId: string) => void;
   onOpenAddProductModal: () => void;
   onUpdateTransaction: (transaction: SaleTransaction) => void;
@@ -42,6 +43,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   transactions,
   settings,
   onUpdateProduct,
+  onSaveProductDirectly,
   onDeleteProduct,
   onOpenAddProductModal,
   onUpdateTransaction,
@@ -71,6 +73,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [adminPin, setAdminPin] = useState(settings.adminPin);
   const [settingsSaved, setSettingsSaved] = useState(false);
 
+  // Keep form fields synced when settings prop updates from Firestore
+  useEffect(() => {
+    if (settings) {
+      setShopName(settings.shopName || '');
+      setTagline(settings.tagline || '');
+      setPhone(settings.phone || '');
+      setAddress(settings.address || '');
+      setCurrencySymbol(settings.currencySymbol || '₹');
+      setAdminPin(settings.adminPin || '1234');
+    }
+  }, [settings]);
+
   // Category statistics
   const getCatStats = (catId: ProductCategory) => {
     const catProds = products.filter(p => p.category === catId);
@@ -89,7 +103,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   // Inline rate quick save
   const handleInlineRateSave = (product: Product) => {
-    onUpdateProduct({
+    onSaveProductDirectly({
       ...product,
       rate: inlineRateValue,
       updatedAt: new Date().toISOString(),

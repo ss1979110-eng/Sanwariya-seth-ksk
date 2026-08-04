@@ -290,6 +290,7 @@ export default function App() {
               setProductToEdit(prod);
               setIsProductModalOpen(true);
             }}
+            onSaveProductDirectly={handleSaveProduct}
             onDeleteProduct={handleDeleteProduct}
             onOpenAddProductModal={() => {
               setProductToEdit(null);
