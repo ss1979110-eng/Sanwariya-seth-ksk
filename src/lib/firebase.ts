@@ -40,6 +40,26 @@ const COLLECTIONS = {
   SETTINGS: 'settings',
 };
 
+// Helper to strip undefined values which cause Firestore setDoc errors
+function sanitizeForFirestore<T>(data: T): T {
+  if (data === null || data === undefined) {
+    return data;
+  }
+  if (Array.isArray(data)) {
+    return data.map((item) => sanitizeForFirestore(item)) as unknown as T;
+  }
+  if (typeof data === 'object' && !(data instanceof Date)) {
+    const cleaned: Record<string, any> = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (value !== undefined) {
+        cleaned[key] = sanitizeForFirestore(value);
+      }
+    }
+    return cleaned as T;
+  }
+  return data;
+}
+
 // Seed initial data if Firestore collections are empty
 export async function seedInitialCloudDataIfNeeded() {
   try {
@@ -49,7 +69,7 @@ export async function seedInitialCloudDataIfNeeded() {
       const batch = writeBatch(db);
       INITIAL_PRODUCTS.forEach((p) => {
         const ref = doc(db, COLLECTIONS.PRODUCTS, p.id);
-        batch.set(ref, p);
+        batch.set(ref, sanitizeForFirestore(p));
       });
       await batch.commit();
     }
@@ -57,7 +77,7 @@ export async function seedInitialCloudDataIfNeeded() {
     const settingsSnap = await getDocs(collection(db, COLLECTIONS.SETTINGS));
     if (settingsSnap.empty) {
       console.log('Seeding initial settings to Firestore...');
-      await setDoc(doc(db, COLLECTIONS.SETTINGS, 'global'), INITIAL_SETTINGS);
+      await setDoc(doc(db, COLLECTIONS.SETTINGS, 'global'), sanitizeForFirestore(INITIAL_SETTINGS));
     }
 
     const transactionsSnap = await getDocs(collection(db, COLLECTIONS.TRANSACTIONS));
@@ -68,7 +88,7 @@ export async function seedInitialCloudDataIfNeeded() {
       let count = 0;
       for (const tx of INITIAL_TRANSACTIONS) {
         const ref = doc(db, COLLECTIONS.TRANSACTIONS, tx.id);
-        batch.set(ref, tx);
+        batch.set(ref, sanitizeForFirestore(tx));
         count++;
         if (count % 400 === 0) {
           await batch.commit();
@@ -155,7 +175,7 @@ export function subscribeToSettings(
 // Write / Update / Delete Cloud Helpers
 export async function saveProductToCloud(product: Product): Promise<void> {
   const docRef = doc(db, COLLECTIONS.PRODUCTS, product.id);
-  await setDoc(docRef, product, { merge: true });
+  await setDoc(docRef, sanitizeForFirestore(product), { merge: true });
 }
 
 export async function deleteProductFromCloud(productId: string): Promise<void> {
@@ -165,7 +185,7 @@ export async function deleteProductFromCloud(productId: string): Promise<void> {
 
 export async function saveTransactionToCloud(transaction: SaleTransaction): Promise<void> {
   const docRef = doc(db, COLLECTIONS.TRANSACTIONS, transaction.id);
-  await setDoc(docRef, transaction, { merge: true });
+  await setDoc(docRef, sanitizeForFirestore(transaction), { merge: true });
 }
 
 export async function recordSaleWithStockDeductionToCloud(
@@ -176,12 +196,12 @@ export async function recordSaleWithStockDeductionToCloud(
 
   // 1. Save new transaction
   const txRef = doc(db, COLLECTIONS.TRANSACTIONS, transaction.id);
-  batch.set(txRef, transaction);
+  batch.set(txRef, sanitizeForFirestore(transaction));
 
   // 2. Update product stocks
   updatedProducts.forEach((prod) => {
     const prodRef = doc(db, COLLECTIONS.PRODUCTS, prod.id);
-    batch.set(prodRef, prod, { merge: true });
+    batch.set(prodRef, sanitizeForFirestore(prod), { merge: true });
   });
 
   await batch.commit();
@@ -194,7 +214,7 @@ export async function deleteTransactionFromCloud(transactionId: string): Promise
 
 export async function saveSettingsToCloud(settings: AdminSettings): Promise<void> {
   const docRef = doc(db, COLLECTIONS.SETTINGS, 'global');
-  await setDoc(docRef, settings, { merge: true });
+  await setDoc(docRef, sanitizeForFirestore(settings), { merge: true });
 }
 
 export async function resetCloudDataToDemo(): Promise<void> {

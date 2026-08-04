@@ -62,7 +62,7 @@ export default function App() {
 
     // 2. Subscribe to real-time product/rate updates
     const unsubscribeProducts = subscribeToProducts((cloudProducts) => {
-      if (cloudProducts && cloudProducts.length > 0) {
+      if (cloudProducts) {
         setProducts(cloudProducts);
         saveStoredProducts(cloudProducts);
       }
