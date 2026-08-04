@@ -1,0 +1,6 @@
+{
+  "name": "AgriShop Manager",
+  "description": "Comprehensive sales, inventory, and rate management platform for agricultural shops with dedicated sections for Fertilizers, Pesticides, Seeds, interactive graphs, and a secure Admin Panel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
