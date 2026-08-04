@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "products": {
+      "title": "Products",
+      "description": "Agri shop products, rates, inventory and chemical details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "unit": { "type": "string" },
+        "rate": { "type": "number" },
+        "mrp": { "type": "number" },
+        "stock": { "type": "number" },
+        "minStockAlert": { "type": "number" },
+        "description": { "type": "string" },
+        "chemicalFormula": { "type": "string" },
+        "brand": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "category", "unit", "rate", "stock", "minStockAlert", "updatedAt"]
+    },
+    "transactions": {
+      "title": "Sale Transactions",
+      "description": "Sales history records and bills",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "billNumber": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "date": { "type": "string" },
+        "month": { "type": "string" },
+        "year": { "type": "number" },
+        "items": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "paymentMethod": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "billNumber", "date", "month", "year", "items", "totalAmount", "paymentMethod"]
+    },
+    "settings": {
+      "title": "Admin Settings",
+      "description": "Global shop configurations and PIN",
+      "type": "object",
+      "properties": {
+        "adminPin": { "type": "string" },
+        "shopName": { "type": "string" },
+        "tagline": { "type": "string" },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "currencySymbol": { "type": "string" },
+        "lowStockThreshold": { "type": "number" }
+      },
+      "required": ["adminPin", "shopName"]
+    }
+  }
+}

@@ -21,8 +21,22 @@ import {
   resetToDemoData 
 } from './utils/storage';
 
+import {
+  seedInitialCloudDataIfNeeded,
+  subscribeToProducts,
+  subscribeToTransactions,
+  subscribeToSettings,
+  saveProductToCloud,
+  deleteProductFromCloud,
+  saveTransactionToCloud,
+  recordSaleWithStockDeductionToCloud,
+  deleteTransactionFromCloud,
+  saveSettingsToCloud,
+  resetCloudDataToDemo
+} from './lib/firebase';
+
 export default function App() {
-  // Core state from storage
+  // Core state from storage with fallback
   const [products, setProducts] = useState<Product[]>(() => getStoredProducts());
   const [transactions, setTransactions] = useState<SaleTransaction[]>(() => getStoredTransactions());
   const [settings, setSettings] = useState<AdminSettings>(() => getStoredSettings());
@@ -41,14 +55,50 @@ export default function App() {
 
   const [preselectedPosProduct, setPreselectedPosProduct] = useState<Product | null>(null);
 
-  // Sync products state to storage
-  const handleUpdateProductsList = (newProducts: Product[]) => {
+  // Real-time Firestore Subscriptions
+  useEffect(() => {
+    // 1. Seed initial data if database is empty
+    seedInitialCloudDataIfNeeded();
+
+    // 2. Subscribe to real-time product/rate updates
+    const unsubscribeProducts = subscribeToProducts((cloudProducts) => {
+      if (cloudProducts && cloudProducts.length > 0) {
+        setProducts(cloudProducts);
+        saveStoredProducts(cloudProducts);
+      }
+    });
+
+    // 3. Subscribe to real-time sale transactions updates
+    const unsubscribeTransactions = subscribeToTransactions((cloudTx) => {
+      if (cloudTx) {
+        setTransactions(cloudTx);
+        saveStoredTransactions(cloudTx);
+      }
+    });
+
+    // 4. Subscribe to real-time shop settings
+    const unsubscribeSettings = subscribeToSettings((cloudSettings) => {
+      if (cloudSettings) {
+        setSettings(cloudSettings);
+        saveStoredSettings(cloudSettings);
+      }
+    });
+
+    return () => {
+      unsubscribeProducts();
+      unsubscribeTransactions();
+      unsubscribeSettings();
+    };
+  }, []);
+
+  // Sync products state to storage & cloud
+  const handleUpdateProductsList = async (newProducts: Product[]) => {
     setProducts(newProducts);
     saveStoredProducts(newProducts);
   };
 
-  // Sync transactions state to storage
-  const handleUpdateTransactionsList = (newTxList: SaleTransaction[]) => {
+  // Sync transactions state to storage & cloud
+  const handleUpdateTransactionsList = async (newTxList: SaleTransaction[]) => {
     setTransactions(newTxList);
     saveStoredTransactions(newTxList);
   };
@@ -69,8 +119,8 @@ export default function App() {
     }
   };
 
-  // Product CRUD
-  const handleSaveProduct = (product: Product) => {
+  // Product CRUD (Admin Rate Change & Stock Update)
+  const handleSaveProduct = async (product: Product) => {
     const exists = products.some((p) => p.id === product.id);
     let updated: Product[];
     if (exists) {
@@ -79,16 +129,29 @@ export default function App() {
       updated = [product, ...products];
     }
     handleUpdateProductsList(updated);
+
+    // Save to Firestore so all users see rate/stock changes instantly
+    try {
+      await saveProductToCloud(product);
+    } catch (err) {
+      console.error('Error syncing product change to cloud:', err);
+    }
   };
 
-  const handleDeleteProduct = (productId: string) => {
+  const handleDeleteProduct = async (productId: string) => {
     const updated = products.filter((p) => p.id !== productId);
     handleUpdateProductsList(updated);
+
+    try {
+      await deleteProductFromCloud(productId);
+    } catch (err) {
+      console.error('Error deleting product from cloud:', err);
+    }
   };
 
-  // Sales Recording & Stock deduction
-  const handleRecordSale = (transaction: SaleTransaction) => {
-    // 1. Add transaction to history
+  // Sales Recording & Stock deduction (Instantly synced to cloud)
+  const handleRecordSale = async (transaction: SaleTransaction) => {
+    // 1. Add transaction to history locally
     const updatedTx = [transaction, ...transactions];
     handleUpdateTransactionsList(updatedTx);
 
@@ -103,31 +166,61 @@ export default function App() {
     });
 
     handleUpdateProductsList(updatedProducts);
+
+    // 3. Atomically write transaction & updated stock to cloud
+    try {
+      await recordSaleWithStockDeductionToCloud(transaction, updatedProducts);
+    } catch (err) {
+      console.error('Error syncing sale transaction to cloud:', err);
+    }
   };
 
   // Past Sale Editing
-  const handleSaveTransactionEdit = (updatedTx: SaleTransaction) => {
+  const handleSaveTransactionEdit = async (updatedTx: SaleTransaction) => {
     const updatedList = transactions.map((t) => (t.id === updatedTx.id ? updatedTx : t));
     handleUpdateTransactionsList(updatedList);
+
+    try {
+      await saveTransactionToCloud(updatedTx);
+    } catch (err) {
+      console.error('Error syncing transaction edit to cloud:', err);
+    }
   };
 
-  const handleDeleteTransaction = (transactionId: string) => {
+  const handleDeleteTransaction = async (transactionId: string) => {
     const updatedList = transactions.filter((t) => t.id !== transactionId);
     handleUpdateTransactionsList(updatedList);
+
+    try {
+      await deleteTransactionFromCloud(transactionId);
+    } catch (err) {
+      console.error('Error deleting transaction from cloud:', err);
+    }
   };
 
   // Settings Save
-  const handleSaveSettings = (newSettings: AdminSettings) => {
+  const handleSaveSettings = async (newSettings: AdminSettings) => {
     setSettings(newSettings);
     saveStoredSettings(newSettings);
+
+    try {
+      await saveSettingsToCloud(newSettings);
+    } catch (err) {
+      console.error('Error syncing settings to cloud:', err);
+    }
   };
 
   // Reset Demo Data
-  const handleResetData = () => {
-    resetToDemoData();
-    setProducts(getStoredProducts());
-    setTransactions(getStoredTransactions());
-    setSettings(getStoredSettings());
+  const handleResetData = async () => {
+    try {
+      await resetCloudDataToDemo();
+    } catch (err) {
+      console.error('Error resetting cloud data:', err);
+      resetToDemoData();
+      setProducts(getStoredProducts());
+      setTransactions(getStoredTransactions());
+      setSettings(getStoredSettings());
+    }
   };
 
   // Low stock counter

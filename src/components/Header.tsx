@@ -50,6 +50,10 @@ export const Header: React.FC<HeaderProps> = ({
           </span>
         </div>
         <div className="flex items-center space-x-3 text-xs font-semibold">
+          <span className="flex items-center space-x-1.5 bg-emerald-950/80 text-emerald-300 px-2.5 py-0.5 rounded border border-emerald-700">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Cloud Live Sync</span>
+          </span>
           <span className="bg-emerald-950/80 text-emerald-300 px-2 py-0.5 rounded border border-emerald-700">
             Active Catalog: {totalProducts} Products
           </span>
