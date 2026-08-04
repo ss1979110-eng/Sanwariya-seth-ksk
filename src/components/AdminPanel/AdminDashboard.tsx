@@ -63,6 +63,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // Sales Tab States
   const [salesSearch, setSalesSearch] = useState('');
   const [salesCategoryFilter, setSalesCategoryFilter] = useState<ProductCategory | 'all'>('all');
+  const [salesYearFilter, setSalesYearFilter] = useState<number | 'all'>('all');
+  const [showAllSales, setShowAllSales] = useState(false);
+
+  // Available transaction years
+  const availableYears = React.useMemo(() => {
+    const set = new Set<number>();
+    set.add(new Date().getFullYear());
+    transactions.forEach(t => {
+      if (t.year) set.add(t.year);
+    });
+    return Array.from(set).sort((a, b) => b - a);
+  }, [transactions]);
 
   // Settings Form States
   const [shopName, setShopName] = useState(settings.shopName);
@@ -123,8 +135,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       salesCategoryFilter === 'all' || 
       t.items.some(i => i.category === salesCategoryFilter);
 
-    return matchSearch && matchCat;
+    const matchYear = 
+      salesYearFilter === 'all' || 
+      t.year === salesYearFilter;
+
+    return matchSearch && matchCat && matchYear;
   });
+
+  const displayedSales = showAllSales ? filteredSales : filteredSales.slice(0, 50);
 
   const handleSettingsFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -449,20 +467,55 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {activeTab === 'sales' && (
         <div className="space-y-4">
           
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900 p-4 rounded-xl border border-slate-800">
-            <div className="relative w-full sm:w-64">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                value={salesSearch}
-                onChange={(e) => setSalesSearch(e.target.value)}
-                placeholder="Search Bill # or Customer..."
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-2 py-1.5 text-xs text-slate-100"
-              />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-900 p-4 rounded-xl border border-slate-800">
+            <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+              <div className="relative w-full sm:w-56">
+                <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  value={salesSearch}
+                  onChange={(e) => setSalesSearch(e.target.value)}
+                  placeholder="Search Bill # or Customer..."
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-2 py-1.5 text-xs text-slate-100"
+                />
+              </div>
+
+              {/* Year Filter */}
+              <select
+                value={salesYearFilter}
+                onChange={(e) => setSalesYearFilter(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                className="bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
+              >
+                <option value="all">All Years</option>
+                {availableYears.map(yr => (
+                  <option key={yr} value={yr}>Year {yr}</option>
+                ))}
+              </select>
+
+              {/* Category Filter */}
+              <select
+                value={salesCategoryFilter}
+                onChange={(e) => setSalesCategoryFilter(e.target.value as ProductCategory | 'all')}
+                className="bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
+              >
+                <option value="all">All Categories</option>
+                <option value="fertilizers">Fertilizers</option>
+                <option value="pesticides">Pesticides</option>
+                <option value="seeds">Seeds</option>
+                <option value="other">Tools & Other</option>
+              </select>
             </div>
 
-            <div className="text-xs text-slate-400 font-bold">
-              Showing {filteredSales.length} of {transactions.length} total transaction logs
+            <div className="flex items-center justify-between md:justify-end gap-3 text-xs text-slate-400 font-bold">
+              <span>Showing {displayedSales.length} of {filteredSales.length} logs</span>
+              {filteredSales.length > 50 && (
+                <button
+                  onClick={() => setShowAllSales(!showAllSales)}
+                  className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 rounded text-xs transition-colors"
+                >
+                  {showAllSales ? 'Show Top 50' : `Show All (${filteredSales.length})`}
+                </button>
+              )}
             </div>
           </div>
 
@@ -480,7 +533,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
-                  {filteredSales.slice(0, 30).map((tx) => (
+                  {displayedSales.map((tx) => (
                     <tr key={tx.id} className="hover:bg-slate-800/40 transition-colors">
                       <td className="py-3 px-4 font-bold text-slate-100">
                         <div className="font-mono text-emerald-400">{tx.billNumber}</div>

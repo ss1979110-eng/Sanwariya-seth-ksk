@@ -279,10 +279,16 @@ export const INITIAL_PRODUCTS: Product[] = [
   }
 ];
 
-// Helper to generate sample transactions spread across past 12 months for 2025 and 2026
+// Helper to generate sample transactions spread across past 12 months for 2025 and 2026 deterministically
 const generateInitialTransactions = (): SaleTransaction[] => {
   const transactions: SaleTransaction[] = [];
-  const currentDate = new Date();
+  
+  // Seeded PRNG for 100% consistent initial data across devices/reloads
+  let seed = 42;
+  const rand = () => {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+  };
   
   // Sample customer names
   const customers = [
@@ -302,29 +308,29 @@ const generateInitialTransactions = (): SaleTransaction[] => {
   const years = [2025, 2026];
 
   years.forEach((year) => {
-    const maxMonth = year === 2026 ? currentDate.getMonth() : 11;
+    const maxMonth = year === 2026 ? 7 : 11; // Fixed 8 months for 2026
 
     for (let monthIdx = 0; monthIdx <= maxMonth; monthIdx++) {
       const monthStr = (monthIdx + 1).toString().padStart(2, '0');
       const monthKey = `${year}-${monthStr}`;
 
-      // 4 to 8 transactions per month
-      const numTx = Math.floor(Math.random() * 5) + 4;
+      // 4 to 6 transactions per month
+      const numTx = Math.floor(rand() * 3) + 4;
 
       for (let t = 0; t < numTx; t++) {
-        const day = Math.floor(Math.random() * 26) + 1;
+        const day = Math.floor(rand() * 25) + 1;
         const dayStr = day.toString().padStart(2, '0');
         const dateStr = `${year}-${monthStr}-${dayStr}`;
-        const cust = customers[Math.floor(Math.random() * customers.length)];
+        const cust = customers[Math.floor(rand() * customers.length)];
 
         // Pick 1-3 random products
-        const numItems = Math.floor(Math.random() * 3) + 1;
+        const numItems = Math.floor(rand() * 3) + 1;
         const selectedProducts: Array<{ p: Product; qty: number }> = [];
 
         for (let k = 0; k < numItems; k++) {
-          const randProd = INITIAL_PRODUCTS[Math.floor(Math.random() * INITIAL_PRODUCTS.length)];
+          const randProd = INITIAL_PRODUCTS[Math.floor(rand() * INITIAL_PRODUCTS.length)];
           if (!selectedProducts.find(item => item.p.id === randProd.id)) {
-            const qty = randProd.category === 'fertilizers' ? Math.floor(Math.random() * 10) + 2 : Math.floor(Math.random() * 4) + 1;
+            const qty = randProd.category === 'fertilizers' ? Math.floor(rand() * 10) + 2 : Math.floor(rand() * 4) + 1;
             selectedProducts.push({ p: randProd, qty });
           }
         }
@@ -352,7 +358,7 @@ const generateInitialTransactions = (): SaleTransaction[] => {
           year: year,
           items,
           totalAmount,
-          paymentMethod: paymentMethods[Math.floor(Math.random() * paymentMethods.length)],
+          paymentMethod: paymentMethods[Math.floor(rand() * paymentMethods.length)],
           notes: 'Standard agricultural supplies sale',
         });
       }

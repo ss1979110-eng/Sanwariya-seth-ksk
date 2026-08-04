@@ -175,7 +175,7 @@ export function subscribeToSettings(
 // Write / Update / Delete Cloud Helpers
 export async function saveProductToCloud(product: Product): Promise<void> {
   const docRef = doc(db, COLLECTIONS.PRODUCTS, product.id);
-  await setDoc(docRef, sanitizeForFirestore(product), { merge: true });
+  await setDoc(docRef, sanitizeForFirestore(product));
 }
 
 export async function deleteProductFromCloud(productId: string): Promise<void> {
@@ -185,7 +185,7 @@ export async function deleteProductFromCloud(productId: string): Promise<void> {
 
 export async function saveTransactionToCloud(transaction: SaleTransaction): Promise<void> {
   const docRef = doc(db, COLLECTIONS.TRANSACTIONS, transaction.id);
-  await setDoc(docRef, sanitizeForFirestore(transaction), { merge: true });
+  await setDoc(docRef, sanitizeForFirestore(transaction));
 }
 
 export async function recordSaleWithStockDeductionToCloud(
@@ -201,7 +201,7 @@ export async function recordSaleWithStockDeductionToCloud(
   // 2. Update product stocks
   updatedProducts.forEach((prod) => {
     const prodRef = doc(db, COLLECTIONS.PRODUCTS, prod.id);
-    batch.set(prodRef, sanitizeForFirestore(prod), { merge: true });
+    batch.set(prodRef, sanitizeForFirestore(prod));
   });
 
   await batch.commit();
@@ -214,7 +214,7 @@ export async function deleteTransactionFromCloud(transactionId: string): Promise
 
 export async function saveSettingsToCloud(settings: AdminSettings): Promise<void> {
   const docRef = doc(db, COLLECTIONS.SETTINGS, 'global');
-  await setDoc(docRef, sanitizeForFirestore(settings), { merge: true });
+  await setDoc(docRef, sanitizeForFirestore(settings));
 }
 
 export async function resetCloudDataToDemo(): Promise<void> {
