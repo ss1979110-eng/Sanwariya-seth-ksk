@@ -29,7 +29,9 @@ import {
   Edit,
   Trash2,
   Search,
-  Receipt
+  Receipt,
+  XCircle,
+  Sparkles
 } from 'lucide-react';
 import { SaleTransaction, AdminSettings, ProductCategory } from '../types';
 
@@ -58,11 +60,18 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
   onOpenEditSaleModal,
   onDeleteTransaction,
 }) => {
-  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  const [selectedYear, setSelectedYear] = useState<number | 'all'>(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState<number | 'all'>('all');
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
+  const [selectedExactDate, setSelectedExactDate] = useState<string>('');
   const [saleSearch, setSaleSearch] = useState('');
   const [showAllList, setShowAllList] = useState(false);
+
+  // Today's Sales Calculation
+  const now = new Date();
+  const todayDateStr = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+  const todayTransactions = useMemo(() => transactions.filter(t => t.date === todayDateStr), [transactions, todayDateStr]);
+  const todayTotalSalesAmount = useMemo(() => todayTransactions.reduce((sum, t) => sum + t.totalAmount, 0), [todayTransactions]);
 
   // Available years in transactions
   const availableYears = useMemo(() => {
@@ -72,21 +81,22 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
     return Array.from(set).sort((a, b) => b - a);
   }, [transactions]);
 
-  // Filter transactions based on selection
+  // Filter transactions based on selection (year, month, exact date, category)
   const filteredTransactions = useMemo(() => {
     return transactions.filter(t => {
-      if (t.year !== selectedYear) return false;
+      if (selectedYear !== 'all' && t.year !== selectedYear) return false;
       if (selectedMonth !== 'all') {
         const txMonth = parseInt(t.month.split('-')[1], 10) - 1;
         if (txMonth !== selectedMonth) return false;
       }
+      if (selectedExactDate && t.date !== selectedExactDate) return false;
       if (selectedCategory !== 'all') {
         const hasCatItem = t.items.some(i => i.category === selectedCategory);
         if (!hasCatItem) return false;
       }
       return true;
     });
-  }, [transactions, selectedYear, selectedMonth, selectedCategory]);
+  }, [transactions, selectedYear, selectedMonth, selectedExactDate, selectedCategory]);
 
   // Overall KPI Calculations
   const metrics = useMemo(() => {
@@ -237,14 +247,28 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
 
         {/* Global Filters */}
         <div className="flex items-center space-x-2 flex-wrap gap-y-2">
+          
+          {/* Exact Date Picker */}
+          <div className="flex items-center space-x-1.5 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs">
+            <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="text-[10px] text-slate-400 font-bold uppercase hidden sm:inline">Date:</span>
+            <input
+              type="date"
+              value={selectedExactDate}
+              onChange={(e) => setSelectedExactDate(e.target.value)}
+              className="bg-transparent text-slate-100 font-mono text-xs focus:outline-none cursor-pointer"
+            />
+          </div>
+
           {/* Year Selector */}
           <div className="flex items-center space-x-1 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs">
-            <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="text-[10px] text-slate-400 font-bold uppercase hidden sm:inline">Year:</span>
             <select
               value={selectedYear}
-              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              onChange={(e) => setSelectedYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
               className="bg-transparent text-slate-100 font-bold focus:outline-none cursor-pointer"
             >
+              <option value="all" className="bg-slate-900 text-slate-100">All Years</option>
               {availableYears.map(yr => (
                 <option key={yr} value={yr} className="bg-slate-900 text-slate-100">
                   Year {yr}
@@ -268,10 +292,27 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
             </select>
           </div>
 
+          {/* Clear Filters Button */}
+          {(selectedExactDate || selectedYear !== 'all' || selectedMonth !== 'all' || selectedCategory !== 'all' || saleSearch) && (
+            <button
+              onClick={() => {
+                setSelectedExactDate('');
+                setSelectedYear('all');
+                setSelectedMonth('all');
+                setSelectedCategory('all');
+                setSaleSearch('');
+              }}
+              className="flex items-center space-x-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 font-bold px-2.5 py-1.5 rounded-xl text-xs transition-colors"
+            >
+              <XCircle className="w-3.5 h-3.5" />
+              <span>Reset</span>
+            </button>
+          )}
+
           {/* Export CSV */}
           <button
             onClick={exportToCSV}
-            className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-colors"
+            className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-colors shadow-sm"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export Report</span>

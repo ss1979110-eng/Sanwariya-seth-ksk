@@ -319,6 +319,7 @@ export default function App() {
             }}
             onSaveSettings={handleSaveSettings}
             onResetData={handleResetData}
+            onOpenQuickPOS={() => setActiveTab('pos')}
           />
         )}
 

@@ -8,7 +8,6 @@ import {
   Sprout, 
   ShieldAlert, 
   Wheat, 
-  Wrench, 
   Tag, 
   Receipt, 
   Settings, 
@@ -18,10 +17,15 @@ import {
   AlertTriangle,
   Layers,
   Calendar,
-  Save
+  Save,
+  DollarSign,
+  Filter,
+  XCircle,
+  Sparkles
 } from 'lucide-react';
 import { Product, SaleTransaction, AdminSettings, ProductCategory } from '../../types';
 import { CATEGORIES } from '../../data/initialData';
+import { TodaySalesModal } from './TodaySalesModal';
 
 interface AdminDashboardProps {
   products: Product[];
@@ -36,6 +40,7 @@ interface AdminDashboardProps {
   onOpenEditSaleModal: (transaction: SaleTransaction) => void;
   onSaveSettings: (settings: AdminSettings) => void;
   onResetData: () => void;
+  onOpenQuickPOS?: () => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -51,6 +56,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onOpenEditSaleModal,
   onSaveSettings,
   onResetData,
+  onOpenQuickPOS,
 }) => {
   const [activeTab, setActiveTab] = useState<'products' | 'categories' | 'sales' | 'settings'>('products');
   
@@ -60,11 +66,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [editingRateId, setEditingRateId] = useState<string | null>(null);
   const [inlineRateValue, setInlineRateValue] = useState<number>(0);
 
-  // Sales Tab States
+  // Sales Tab States & Advanced Filters
   const [salesSearch, setSalesSearch] = useState('');
   const [salesCategoryFilter, setSalesCategoryFilter] = useState<ProductCategory | 'all'>('all');
   const [salesYearFilter, setSalesYearFilter] = useState<number | 'all'>('all');
+  const [salesMonthFilter, setSalesMonthFilter] = useState<number | 'all'>('all');
+  const [salesDateFilter, setSalesDateFilter] = useState<string>('');
   const [showAllSales, setShowAllSales] = useState(false);
+  const [isTodaySalesModalOpen, setIsTodaySalesModalOpen] = useState(false);
+
+  // Today's Sales Calculation
+  const now = new Date();
+  const todayDateStr = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+  const todayTransactions = transactions.filter(t => t.date === todayDateStr);
+  const todayTotalSalesAmount = todayTransactions.reduce((sum, t) => sum + t.totalAmount, 0);
 
   // Available transaction years
   const availableYears = React.useMemo(() => {
@@ -123,13 +138,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setEditingRateId(null);
   };
 
-  // Sales filtering
+  // Sales filtering with date, year, month, name search
   const filteredSales = transactions.filter(t => {
     const query = salesSearch.toLowerCase().trim();
     const matchSearch = 
       !query || 
       t.billNumber.toLowerCase().includes(query) || 
-      (t.customerName && t.customerName.toLowerCase().includes(query));
+      (t.customerName && t.customerName.toLowerCase().includes(query)) ||
+      (t.customerPhone && t.customerPhone.includes(query)) ||
+      t.items.some(i => i.productName.toLowerCase().includes(query));
 
     const matchCat = 
       salesCategoryFilter === 'all' || 
@@ -139,7 +156,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       salesYearFilter === 'all' || 
       t.year === salesYearFilter;
 
-    return matchSearch && matchCat && matchYear;
+    const matchMonth = 
+      salesMonthFilter === 'all' || 
+      (t.month && parseInt(t.month.split('-')[1], 10) - 1 === salesMonthFilter);
+
+    const matchDate = 
+      !salesDateFilter || 
+      t.date === salesDateFilter;
+
+    return matchSearch && matchCat && matchYear && matchMonth && matchDate;
   });
 
   const displayedSales = showAllSales ? filteredSales : filteredSales.slice(0, 50);
@@ -177,12 +202,60 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </p>
         </div>
 
+      {/* TAB NAVIGATION HEADER & TODAY SALES WIDGET */}
+      <div className="space-y-4">
+        
+        {/* Today's Sales Admin Action Banner */}
+        <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-900 p-4 sm:p-5 rounded-2xl border border-emerald-500/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center space-x-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-600/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+              <DollarSign className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="text-[10px] uppercase font-black tracking-wider text-emerald-400 bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                  Today ({todayDateStr})
+                </span>
+                <span className="text-xs text-slate-400 font-medium">
+                  {todayTransactions.length} transaction(s) recorded
+                </span>
+              </div>
+              <div className="flex items-baseline space-x-2 mt-0.5">
+                <span className="text-xs text-slate-300 font-bold">Total Today's Sale:</span>
+                <span className="text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight">
+                  {settings.currencySymbol}{todayTotalSalesAmount.toLocaleString()}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2 w-full sm:w-auto">
+            <button
+              onClick={() => setIsTodaySalesModalOpen(true)}
+              className="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl text-xs flex items-center justify-center space-x-2 shadow-lg shadow-emerald-950/50 transition-colors"
+            >
+              <Edit3 className="w-4 h-4" />
+              <span>Edit Today's Sales</span>
+            </button>
+            
+            {onOpenQuickPOS && (
+              <button
+                onClick={onOpenQuickPOS}
+                className="flex-1 sm:flex-none px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors"
+              >
+                <Plus className="w-4 h-4 text-emerald-400" />
+                <span>New Sale</span>
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Tab Navigation Controls */}
-        <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700/80 flex-wrap gap-1">
+        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex-wrap gap-1 shadow-md">
           <button
             onClick={() => setActiveTab('products')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${
-              activeTab === 'products' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-slate-700'
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
+              activeTab === 'products' ? 'bg-amber-500 text-slate-950 shadow-md font-black' : 'text-slate-300 hover:bg-slate-800'
             }`}
           >
             <Tag className="w-3.5 h-3.5" />
@@ -191,8 +264,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           <button
             onClick={() => setActiveTab('categories')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${
-              activeTab === 'categories' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-slate-700'
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
+              activeTab === 'categories' ? 'bg-amber-500 text-slate-950 shadow-md font-black' : 'text-slate-300 hover:bg-slate-800'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -201,24 +274,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           <button
             onClick={() => setActiveTab('sales')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${
-              activeTab === 'sales' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-slate-700'
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
+              activeTab === 'sales' ? 'bg-amber-500 text-slate-950 shadow-md font-black' : 'text-slate-300 hover:bg-slate-800'
             }`}
           >
             <Receipt className="w-3.5 h-3.5" />
-            <span>Sales Logs</span>
+            <span>Sales Logs & Filters</span>
           </button>
 
           <button
             onClick={() => setActiveTab('settings')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 ${
-              activeTab === 'settings' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-slate-700'
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
+              activeTab === 'settings' ? 'bg-amber-500 text-slate-950 shadow-md font-black' : 'text-slate-300 hover:bg-slate-800'
             }`}
           >
             <Settings className="w-3.5 h-3.5" />
             <span>Shop Settings</span>
           </button>
         </div>
+      </div>
       </div>
 
       {/* TAB 1: PRODUCTS & RATES MANAGEMENT */}
@@ -467,24 +541,70 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {activeTab === 'sales' && (
         <div className="space-y-4">
           
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-900 p-4 rounded-xl border border-slate-800">
-            <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
-              <div className="relative w-full sm:w-56">
-                <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+              <div className="flex items-center space-x-2">
+                <Receipt className="w-5 h-5 text-emerald-400" />
+                <h3 className="text-sm font-extrabold text-slate-100">
+                  Search & Filter Sales Logs
+                </h3>
+              </div>
+              <span className="text-xs text-slate-400 font-medium">
+                Showing {displayedSales.length} of {filteredSales.length} matching sale log(s)
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2.5">
+              {/* Search input for Name, Bill #, Phone, Product */}
+              <div className="relative flex-1 min-w-[200px]">
+                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
                   value={salesSearch}
                   onChange={(e) => setSalesSearch(e.target.value)}
-                  placeholder="Search Bill # or Customer..."
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-2 py-1.5 text-xs text-slate-100"
+                  placeholder="Search Name, Phone, Bill #, Product..."
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500"
                 />
               </div>
+
+              {/* Specific Date Picker Filter */}
+              <div className="flex items-center space-x-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-xl text-xs text-slate-200">
+                <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-[10px] text-slate-400 font-bold uppercase hidden sm:inline">Date:</span>
+                <input
+                  type="date"
+                  value={salesDateFilter}
+                  onChange={(e) => setSalesDateFilter(e.target.value)}
+                  className="bg-transparent text-xs text-slate-100 font-mono focus:outline-none"
+                />
+              </div>
+
+              {/* Month Filter */}
+              <select
+                value={salesMonthFilter}
+                onChange={(e) => setSalesMonthFilter(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                className="bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
+              >
+                <option value="all">All Months</option>
+                <option value={0}>Jan (जनवरी)</option>
+                <option value={1}>Feb (फ़रवरी)</option>
+                <option value={2}>Mar (मार्च)</option>
+                <option value={3}>Apr (अप्रैल)</option>
+                <option value={4}>May (मई)</option>
+                <option value={5}>Jun (जून)</option>
+                <option value={6}>Jul (जुलाई)</option>
+                <option value={7}>Aug (अगस्त)</option>
+                <option value={8}>Sep (सितंबर)</option>
+                <option value={9}>Oct (अक्टूबर)</option>
+                <option value={10}>Nov (नवंबर)</option>
+                <option value={11}>Dec (दिसंबर)</option>
+              </select>
 
               {/* Year Filter */}
               <select
                 value={salesYearFilter}
                 onChange={(e) => setSalesYearFilter(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
+                className="bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
               >
                 <option value="all">All Years</option>
                 {availableYears.map(yr => (
@@ -496,7 +616,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <select
                 value={salesCategoryFilter}
                 onChange={(e) => setSalesCategoryFilter(e.target.value as ProductCategory | 'all')}
-                className="bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
+                className="bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
               >
                 <option value="all">All Categories</option>
                 <option value="fertilizers">Fertilizers</option>
@@ -504,9 +624,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <option value="seeds">Seeds</option>
                 <option value="other">Tools & Other</option>
               </select>
+
+              {/* Reset Filters button */}
+              {(salesSearch || salesDateFilter || salesYearFilter !== 'all' || salesMonthFilter !== 'all' || salesCategoryFilter !== 'all') && (
+                <button
+                  onClick={() => {
+                    setSalesSearch('');
+                    setSalesDateFilter('');
+                    setSalesYearFilter('all');
+                    setSalesMonthFilter('all');
+                    setSalesCategoryFilter('all');
+                  }}
+                  className="px-2.5 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 rounded-xl text-xs font-bold flex items-center space-x-1 transition-colors"
+                >
+                  <XCircle className="w-3.5 h-3.5" />
+                  <span>Reset Filters</span>
+                </button>
+              )}
             </div>
 
-            <div className="flex items-center justify-between md:justify-end gap-3 text-xs text-slate-400 font-bold">
+            <div className="flex items-center justify-between md:justify-end gap-3 text-xs text-slate-400 font-bold pt-2 border-t border-slate-800">
               <span>Showing {displayedSales.length} of {filteredSales.length} logs</span>
               {filteredSales.length > 50 && (
                 <button
@@ -717,6 +854,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
         </div>
       )}
+
+      {/* Today's Sales Management Modal */}
+      <TodaySalesModal
+        isOpen={isTodaySalesModalOpen}
+        onClose={() => setIsTodaySalesModalOpen(false)}
+        transactions={transactions}
+        settings={settings}
+        onOpenEditSaleModal={onOpenEditSaleModal}
+        onDeleteTransaction={onDeleteTransaction}
+        onOpenQuickPOS={onOpenQuickPOS}
+      />
 
     </div>
   );
