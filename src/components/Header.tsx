@@ -8,6 +8,7 @@ import {
   ShieldCheck, 
   Flame, 
   Menu,
+  MoreVertical,
   X,
   PhoneCall,
   MapPin,
@@ -158,28 +159,38 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </div>
 
-            {/* ☰ Three-Line Hamburger Menu Button */}
+            {/* ☰ / ⋮ Three-Dot & Three-Line Menu Trigger Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-xl text-xs font-black transition-all shadow-md shadow-emerald-950/60 border border-emerald-400/40"
+              className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-xl text-xs font-black transition-all shadow-md shadow-emerald-950/60 border border-emerald-400/40 cursor-pointer"
               aria-label="Toggle All Options Menu"
+              title="All Options Menu"
             >
               {isMenuOpen ? (
                 <X className="w-5 h-5 text-white" />
               ) : (
-                <Menu className="w-5 h-5 text-white" />
+                <div className="flex items-center space-x-0.5">
+                  <Menu className="w-4 h-4 text-white" />
+                  <MoreVertical className="w-4 h-4 text-emerald-200" />
+                </div>
               )}
-              <span className="hidden sm:inline">All Menu Options</span>
+              <span className="hidden sm:inline">All Options</span>
             </button>
 
           </div>
         </div>
       </div>
 
-      {/* Dropdown / Drawer Modal for Three-Line Menu */}
+      {/* Right Side Drawer Sidebar Overlay for Menu Options */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex justify-end">
-          <div className="bg-slate-900 border-l border-slate-800 w-full max-w-sm h-full p-6 flex flex-col justify-between overflow-y-auto shadow-2xl animate-in slide-in-from-right duration-200">
+        <div 
+          className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex justify-end"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          <div 
+            className="bg-slate-900 border-l border-slate-800 w-80 max-w-[85vw] h-full p-6 flex flex-col justify-between overflow-y-auto shadow-2xl transition-all"
+            onClick={(e) => e.stopPropagation()}
+          >
             
             <div className="space-y-6">
               {/* Header inside Menu */}
