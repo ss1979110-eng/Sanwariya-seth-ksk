@@ -181,14 +181,14 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Right Side Drawer Sidebar Overlay for Menu Options */}
+      {/* Right Side Full-Height Sidebar Overlay for Menu Options */}
       {isMenuOpen && (
         <div 
-          className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex justify-end"
+          className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex justify-end h-screen w-screen overflow-hidden"
           onClick={() => setIsMenuOpen(false)}
         >
           <div 
-            className="bg-slate-900 border-l border-slate-800 w-80 max-w-[85vw] h-full p-6 flex flex-col justify-between overflow-y-auto shadow-2xl transition-all"
+            className="bg-slate-900 border-l border-slate-800 w-80 sm:w-96 max-w-[90vw] h-full h-screen p-6 flex flex-col justify-between overflow-y-auto shadow-2xl transition-all"
             onClick={(e) => e.stopPropagation()}
           >
             
