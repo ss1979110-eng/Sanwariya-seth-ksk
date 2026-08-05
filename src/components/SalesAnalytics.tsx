@@ -66,6 +66,7 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
   const [selectedExactDate, setSelectedExactDate] = useState<string>('');
   const [saleSearch, setSaleSearch] = useState('');
   const [showAllList, setShowAllList] = useState(false);
+  const [chartViewMode, setChartViewMode] = useState<'daily' | 'monthly'>('daily');
 
   // Today's Sales Calculation
   const now = new Date();
@@ -126,6 +127,50 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
       count: filteredTransactions.length,
     };
   }, [filteredTransactions, selectedCategory]);
+
+  // Exact Date Day-by-Day Chart Data
+  const dailyChartData = useMemo(() => {
+    const map = new Map<string, { dateStr: string; displayDate: string; TotalSales: number; Fertilizers: number; Pesticides: number; Seeds: number; Others: number }>();
+
+    transactions
+      .filter(t => {
+        if (selectedYear !== 'all' && t.year !== selectedYear) return false;
+        if (selectedMonth !== 'all') {
+          const monthIdx = parseInt(t.month.split('-')[1], 10) - 1;
+          if (monthIdx !== selectedMonth) return false;
+        }
+        return true;
+      })
+      .forEach(t => {
+        const rawDate = t.date; // e.g. "2026-08-04"
+        const parts = rawDate ? rawDate.split('-') : [];
+        const formattedLabel = parts.length === 3 ? `${parts[2]}/${parts[1]}` : rawDate;
+
+        const existing = map.get(rawDate) || {
+          dateStr: rawDate,
+          displayDate: formattedLabel,
+          TotalSales: 0,
+          Fertilizers: 0,
+          Pesticides: 0,
+          Seeds: 0,
+          Others: 0,
+        };
+
+        existing.TotalSales += t.totalAmount;
+        t.items.forEach(item => {
+          if (selectedCategory !== 'all' && item.category !== selectedCategory) return;
+          if (item.category === 'fertilizers') existing.Fertilizers += item.total;
+          else if (item.category === 'pesticides') existing.Pesticides += item.total;
+          else if (item.category === 'seeds') existing.Seeds += item.total;
+          else existing.Others += item.total;
+        });
+
+        map.set(rawDate, existing);
+      });
+
+    return Array.from(map.values())
+      .sort((a, b) => a.dateStr.localeCompare(b.dateStr));
+  }, [transactions, selectedYear, selectedMonth, selectedCategory]);
 
   // Yearly Month-by-Month Chart Data
   const yearlyChartData = useMemo(() => {
@@ -392,30 +437,79 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
       {/* Main Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* Yearly Month-by-Month Sales Graph */}
+        {/* Yearly / Daily Sales Trend Graph */}
         <div className="lg:col-span-8 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="font-extrabold text-slate-100 text-base">Yearly Monthly Sales Trend ({selectedYear})</h3>
-              <p className="text-xs text-slate-400">Monthly breakdown across Fertilizers, Pesticides, and Seeds</p>
+              <h3 className="font-extrabold text-slate-100 text-base flex items-center space-x-2">
+                <span>{chartViewMode === 'daily' ? 'Exact Date Daily Sales Graph' : 'Yearly Monthly Sales Trend'}</span>
+                <span className="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">
+                  {chartViewMode === 'daily' ? `${dailyChartData.length} Recorded Date(s)` : `Year ${selectedYear}`}
+                </span>
+              </h3>
+              <p className="text-xs text-slate-400">
+                {chartViewMode === 'daily' 
+                  ? 'Day-by-day exact date sales breakdown across Fertilizers, Pesticides, and Seeds'
+                  : 'Monthly breakdown across Fertilizers, Pesticides, and Seeds'}
+              </p>
+            </div>
+
+            {/* View Mode Toggle Switch */}
+            <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700/80 self-start sm:self-auto shrink-0">
+              <button
+                onClick={() => setChartViewMode('daily')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                  chartViewMode === 'daily' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Exact Date (Daily)
+              </button>
+              <button
+                onClick={() => setChartViewMode('monthly')}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                  chartViewMode === 'monthly' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Monthly Trend
+              </button>
             </div>
           </div>
 
           <div className="h-72 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={yearlyChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
-                <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} tickFormatter={(v) => `₹${v / 1000}k`} />
-                <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
-                  formatter={(value: any) => [`${settings.currencySymbol}${Number(value).toLocaleString()}`, '']}
-                />
-                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-                <Bar dataKey="Fertilizers" stackId="a" fill={CATEGORY_COLORS.fertilizers} radius={[0, 0, 0, 0]} />
-                <Bar dataKey="Pesticides" stackId="a" fill={CATEGORY_COLORS.pesticides} radius={[0, 0, 0, 0]} />
-                <Bar dataKey="Seeds" stackId="a" fill={CATEGORY_COLORS.seeds} radius={[4, 4, 0, 0]} />
-              </BarChart>
+              {chartViewMode === 'daily' ? (
+                <BarChart data={dailyChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
+                  <XAxis dataKey="displayDate" stroke="#94a3b8" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} tickFormatter={(v) => `₹${v}`} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                    labelFormatter={(label, items) => {
+                      const item = items && items[0] ? items[0].payload : null;
+                      return item ? `Exact Date: ${item.dateStr}` : label;
+                    }}
+                    formatter={(value: any) => [`${settings.currencySymbol}${Number(value).toLocaleString()}`, '']}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
+                  <Bar dataKey="Fertilizers" stackId="a" fill={CATEGORY_COLORS.fertilizers} radius={[0, 0, 0, 0]} />
+                  <Bar dataKey="Pesticides" stackId="a" fill={CATEGORY_COLORS.pesticides} radius={[0, 0, 0, 0]} />
+                  <Bar dataKey="Seeds" stackId="a" fill={CATEGORY_COLORS.seeds} radius={[4, 4, 0, 0]} />
+                </BarChart>
+              ) : (
+                <BarChart data={yearlyChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
+                  <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} tickFormatter={(v) => `₹${v / 1000}k`} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                    formatter={(value: any) => [`${settings.currencySymbol}${Number(value).toLocaleString()}`, '']}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
+                  <Bar dataKey="Fertilizers" stackId="a" fill={CATEGORY_COLORS.fertilizers} radius={[0, 0, 0, 0]} />
+                  <Bar dataKey="Pesticides" stackId="a" fill={CATEGORY_COLORS.pesticides} radius={[0, 0, 0, 0]} />
+                  <Bar dataKey="Seeds" stackId="a" fill={CATEGORY_COLORS.seeds} radius={[4, 4, 0, 0]} />
+                </BarChart>
+              )}
             </ResponsiveContainer>
           </div>
         </div>

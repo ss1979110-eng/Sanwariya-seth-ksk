@@ -14,7 +14,8 @@ import {
   Wheat, 
   Wrench,
   Printer,
-  Sparkles
+  Sparkles,
+  Calendar
 } from 'lucide-react';
 import { Product, SaleItem, SaleTransaction, AdminSettings, ProductCategory } from '../types';
 
@@ -50,6 +51,10 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
 
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
+  const [saleDate, setSaleDate] = useState<string>(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+  });
   const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'UPI' | 'Credit' | 'Bank Transfer'>('Cash');
   const [notes, setNotes] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -106,12 +111,13 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
     e.preventDefault();
     if (cart.length === 0) return;
 
-    const now = new Date();
-    const year = now.getFullYear();
-    const monthStr = (now.getMonth() + 1).toString().padStart(2, '0');
-    const dayStr = now.getDate().toString().padStart(2, '0');
+    // Use saleDate selected by user, or default to today if empty
+    const selectedDateObj = saleDate ? new Date(saleDate + 'T00:00:00') : new Date();
+    const year = selectedDateObj.getFullYear();
+    const monthStr = (selectedDateObj.getMonth() + 1).toString().padStart(2, '0');
+    const dayStr = selectedDateObj.getDate().toString().padStart(2, '0');
     const monthKey = `${year}-${monthStr}`;
-    const dateStr = `${year}-${monthStr}-${dayStr}`;
+    const dateStr = saleDate || `${year}-${monthStr}-${dayStr}`;
     const billNum = `BILL-${Date.now().toString().slice(-6)}`;
 
     const newTransaction: SaleTransaction = {
@@ -410,26 +416,44 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
               </div>
             </div>
 
-            {/* Payment Mode */}
-            <div>
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
-                Payment Mode
-              </label>
-              <div className="grid grid-cols-4 gap-1.5">
-                {(['Cash', 'UPI', 'Credit', 'Bank Transfer'] as const).map((mode) => (
-                  <button
-                    key={mode}
-                    type="button"
-                    onClick={() => setPaymentMethod(mode)}
-                    className={`py-1 px-1.5 rounded-lg text-[11px] font-bold border transition-all text-center ${
-                      paymentMethod === mode
-                        ? 'bg-emerald-600 border-emerald-500 text-white'
-                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
-                    }`}
-                  >
-                    {mode}
-                  </button>
-                ))}
+            {/* Sale Date & Payment Mode */}
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center space-x-1 mb-1">
+                  <Calendar className="w-3 h-3 text-emerald-400" />
+                  <span>Sale Date (तारीख)</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    value={saleDate}
+                    onChange={(e) => setSaleDate(e.target.value)}
+                    required
+                    className="w-full bg-slate-800 border border-emerald-500/40 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                  Payment Mode
+                </label>
+                <div className="grid grid-cols-2 gap-1">
+                  {(['Cash', 'UPI', 'Credit', 'Bank Transfer'] as const).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => setPaymentMethod(mode)}
+                      className={`py-1 px-1 rounded text-[10px] font-bold border transition-all text-center truncate ${
+                        paymentMethod === mode
+                          ? 'bg-emerald-600 border-emerald-500 text-white'
+                          : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                      }`}
+                    >
+                      {mode}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
