@@ -85,11 +85,17 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
   // Filter transactions based on selection (year, month, exact date, category)
   const filteredTransactions = useMemo(() => {
     return transactions.filter(t => {
-      if (selectedYear !== 'all' && t.year !== selectedYear) return false;
+      const txYear = t.year || (t.date ? parseInt(t.date.split('-')[0], 10) : new Date().getFullYear());
+      if (selectedYear !== 'all' && txYear !== selectedYear) return false;
+
       if (selectedMonth !== 'all') {
-        const txMonth = parseInt(t.month.split('-')[1], 10) - 1;
-        if (txMonth !== selectedMonth) return false;
+        const monthNum = t.month && t.month.includes('-') 
+          ? parseInt(t.month.split('-')[1], 10) 
+          : (t.date ? parseInt(t.date.split('-')[1], 10) : 1);
+        const txMonthIdx = monthNum - 1;
+        if (txMonthIdx !== selectedMonth) return false;
       }
+
       if (selectedExactDate && t.date !== selectedExactDate) return false;
       if (selectedCategory !== 'all') {
         const hasCatItem = t.items.some(i => i.category === selectedCategory);
@@ -134,9 +140,14 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
 
     transactions
       .filter(t => {
-        if (selectedYear !== 'all' && t.year !== selectedYear) return false;
+        const txYear = t.year || (t.date ? parseInt(t.date.split('-')[0], 10) : new Date().getFullYear());
+        if (selectedYear !== 'all' && txYear !== selectedYear) return false;
+
         if (selectedMonth !== 'all') {
-          const monthIdx = parseInt(t.month.split('-')[1], 10) - 1;
+          const monthNum = t.month && t.month.includes('-')
+            ? parseInt(t.month.split('-')[1], 10)
+            : (t.date ? parseInt(t.date.split('-')[1], 10) : 1);
+          const monthIdx = monthNum - 1;
           if (monthIdx !== selectedMonth) return false;
         }
         return true;
@@ -185,9 +196,15 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
     }));
 
     transactions
-      .filter(t => t.year === selectedYear)
+      .filter(t => {
+        const txYear = t.year || (t.date ? parseInt(t.date.split('-')[0], 10) : new Date().getFullYear());
+        return selectedYear === 'all' || txYear === selectedYear;
+      })
       .forEach(t => {
-        const monthIdx = parseInt(t.month.split('-')[1], 10) - 1;
+        const monthNum = t.month && t.month.includes('-')
+          ? parseInt(t.month.split('-')[1], 10)
+          : (t.date ? parseInt(t.date.split('-')[1], 10) : 1);
+        const monthIdx = monthNum - 1;
         if (monthIdx >= 0 && monthIdx < 12) {
           monthlyData[monthIdx].TotalSales += t.totalAmount;
           t.items.forEach(item => {

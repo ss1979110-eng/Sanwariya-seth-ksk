@@ -154,11 +154,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
     const matchYear = 
       salesYearFilter === 'all' || 
-      t.year === salesYearFilter;
+      t.year === salesYearFilter ||
+      (t.date && parseInt(t.date.split('-')[0], 10) === salesYearFilter);
 
     const matchMonth = 
       salesMonthFilter === 'all' || 
-      (t.month && parseInt(t.month.split('-')[1], 10) - 1 === salesMonthFilter);
+      (t.month && (parseInt(t.month.split('-')[1], 10) - 1) === salesMonthFilter) ||
+      (t.date && (parseInt(t.date.split('-')[1], 10) - 1) === salesMonthFilter);
 
     const matchDate = 
       !salesDateFilter || 

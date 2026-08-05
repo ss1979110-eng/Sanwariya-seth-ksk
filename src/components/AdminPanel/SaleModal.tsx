@@ -65,15 +65,29 @@ export const SaleModal: React.FC<SaleModalProps> = ({
     e.preventDefault();
     if (items.length === 0) return;
 
-    const [yearStr, monthStr] = date.split('-');
-    const yearNum = parseInt(yearStr, 10) || saleToEdit.year;
-    const monthKey = `${yearStr}-${monthStr}`;
+    let yearNum = saleToEdit.year;
+    let monthStr = saleToEdit.month ? saleToEdit.month.split('-')[1] : '01';
+    let dayStr = '01';
+
+    if (date && date.includes('-')) {
+      const parts = date.split('-');
+      if (parts.length >= 2) {
+        yearNum = parseInt(parts[0], 10) || yearNum;
+        monthStr = parts[1].padStart(2, '0');
+        if (parts.length >= 3) {
+          dayStr = parts[2].padStart(2, '0');
+        }
+      }
+    }
+
+    const monthKey = `${yearNum}-${monthStr}`;
+    const formattedDate = `${yearNum}-${monthStr}-${dayStr}`;
 
     const updatedTx: SaleTransaction = {
       ...saleToEdit,
       customerName: customerName.trim() || 'Walk-in Customer',
       customerPhone: customerPhone.trim() || 'N/A',
-      date,
+      date: formattedDate,
       month: monthKey,
       year: yearNum,
       paymentMethod,

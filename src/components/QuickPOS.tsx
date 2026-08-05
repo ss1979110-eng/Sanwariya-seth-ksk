@@ -120,12 +120,23 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
     e.preventDefault();
     if (cart.length === 0) return;
 
-    const selectedDateObj = saleDate ? new Date(saleDate + 'T00:00:00') : new Date();
-    const year = selectedDateObj.getFullYear();
-    const monthStr = (selectedDateObj.getMonth() + 1).toString().padStart(2, '0');
-    const dayStr = selectedDateObj.getDate().toString().padStart(2, '0');
+    let year = new Date().getFullYear();
+    let monthStr = (new Date().getMonth() + 1).toString().padStart(2, '0');
+    let dayStr = new Date().getDate().toString().padStart(2, '0');
+
+    if (saleDate && saleDate.includes('-')) {
+      const parts = saleDate.split('-');
+      if (parts.length >= 2) {
+        year = parseInt(parts[0], 10) || year;
+        monthStr = parts[1].padStart(2, '0');
+        if (parts.length >= 3) {
+          dayStr = parts[2].padStart(2, '0');
+        }
+      }
+    }
+
     const monthKey = `${year}-${monthStr}`;
-    const dateStr = saleDate || `${year}-${monthStr}-${dayStr}`;
+    const dateStr = `${year}-${monthStr}-${dayStr}`;
     const billNum = `BILL-${Date.now().toString().slice(-6)}`;
 
     const newTransaction: SaleTransaction = {
@@ -162,12 +173,23 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
       return;
     }
 
-    const selectedDateObj = saleDate ? new Date(saleDate + 'T00:00:00') : new Date();
-    const year = selectedDateObj.getFullYear();
-    const monthStr = (selectedDateObj.getMonth() + 1).toString().padStart(2, '0');
-    const dayStr = selectedDateObj.getDate().toString().padStart(2, '0');
+    let year = new Date().getFullYear();
+    let monthStr = (new Date().getMonth() + 1).toString().padStart(2, '0');
+    let dayStr = new Date().getDate().toString().padStart(2, '0');
+
+    if (saleDate && saleDate.includes('-')) {
+      const parts = saleDate.split('-');
+      if (parts.length >= 2) {
+        year = parseInt(parts[0], 10) || year;
+        monthStr = parts[1].padStart(2, '0');
+        if (parts.length >= 3) {
+          dayStr = parts[2].padStart(2, '0');
+        }
+      }
+    }
+
     const monthKey = `${year}-${monthStr}`;
-    const dateStr = saleDate || `${year}-${monthStr}-${dayStr}`;
+    const dateStr = `${year}-${monthStr}-${dayStr}`;
     const billNum = `BILL-DIRECT-${Date.now().toString().slice(-6)}`;
 
     const categoryNames: Record<ProductCategory, string> = {
