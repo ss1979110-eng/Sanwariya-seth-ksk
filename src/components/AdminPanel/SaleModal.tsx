@@ -86,19 +86,19 @@ export const SaleModal: React.FC<SaleModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-700/80 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 my-8">
+    <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 my-8">
         
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-slate-200 transition-colors p-1"
+          className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors p-1"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center space-x-2 text-emerald-400">
+        <div className="flex items-center space-x-2 text-emerald-700">
           <Edit className="w-5 h-5" />
-          <h3 className="text-lg font-extrabold text-slate-100">
+          <h3 className="text-lg font-extrabold text-slate-900">
             Edit Sale Transaction ({saleToEdit.billNumber})
           </h3>
         </div>
@@ -107,41 +107,41 @@ export const SaleModal: React.FC<SaleModalProps> = ({
           
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="font-bold text-slate-400 block mb-1">Customer Name</label>
+              <label className="font-bold text-slate-600 block mb-1">Customer Name</label>
               <input
                 type="text"
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
             <div>
-              <label className="font-bold text-slate-400 block mb-1">Customer Phone</label>
+              <label className="font-bold text-slate-600 block mb-1">Customer Phone</label>
               <input
                 type="text"
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="font-bold text-slate-400 block mb-1">Transaction Date</label>
+              <label className="font-bold text-slate-600 block mb-1">Transaction Date</label>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
             <div>
-              <label className="font-bold text-slate-400 block mb-1">Payment Method</label>
+              <label className="font-bold text-slate-600 block mb-1">Payment Method</label>
               <select
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value as any)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="Cash">Cash</option>
                 <option value="UPI">UPI</option>
@@ -152,46 +152,46 @@ export const SaleModal: React.FC<SaleModalProps> = ({
           </div>
 
           {/* Items Table */}
-          <div className="space-y-2 pt-2 border-t border-slate-800">
-            <label className="font-bold text-slate-300 block">Sale Items & Rates</label>
+          <div className="space-y-2 pt-2 border-t border-slate-200">
+            <label className="font-bold text-slate-800 block">Sale Items & Rates</label>
             {items.map((item, idx) => (
-              <div key={idx} className="flex items-center justify-between bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/60 gap-2">
+              <div key={idx} className="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200 gap-2">
                 <div className="flex-1">
-                  <div className="font-bold text-slate-100">{item.productName}</div>
-                  <div className="text-[10px] text-slate-400 uppercase">{item.category}</div>
+                  <div className="font-bold text-slate-900">{item.productName}</div>
+                  <div className="text-[10px] text-slate-500 uppercase">{item.category}</div>
                 </div>
 
                 <div className="flex items-center space-x-2">
                   <div>
-                    <span className="text-[10px] text-slate-400 block">Qty</span>
+                    <span className="text-[10px] text-slate-500 block">Qty</span>
                     <input
                       type="number"
                       min="1"
                       value={item.quantity}
                       onChange={(e) => updateItemQty(idx, Number(e.target.value))}
-                      className="w-14 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-center text-slate-100"
+                      className="w-14 bg-white border border-slate-300 rounded px-1.5 py-0.5 text-center text-slate-900"
                     />
                   </div>
 
                   <div>
-                    <span className="text-[10px] text-slate-400 block">Rate</span>
+                    <span className="text-[10px] text-slate-500 block">Rate</span>
                     <input
                       type="number"
                       min="0"
                       value={item.rate}
                       onChange={(e) => updateItemRate(idx, Number(e.target.value))}
-                      className="w-16 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-center text-emerald-400 font-bold"
+                      className="w-16 bg-white border border-slate-300 rounded px-1.5 py-0.5 text-center text-emerald-800 font-bold"
                     />
                   </div>
 
-                  <span className="font-bold text-emerald-400 w-16 text-right">
+                  <span className="font-bold text-emerald-700 w-16 text-right">
                     {settings.currencySymbol}{item.total}
                   </span>
 
                   <button
                     type="button"
                     onClick={() => removeItem(idx)}
-                    className="text-slate-500 hover:text-rose-400 p-1"
+                    className="text-slate-400 hover:text-rose-600 p-1"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -200,9 +200,9 @@ export const SaleModal: React.FC<SaleModalProps> = ({
             ))}
           </div>
 
-          <div className="flex justify-between items-center bg-slate-800 p-3 rounded-xl border border-slate-700">
-            <span className="font-bold text-slate-300">Updated Total Amount:</span>
-            <span className="text-xl font-extrabold text-emerald-400">
+          <div className="flex justify-between items-center bg-emerald-50/60 p-3 rounded-xl border border-emerald-200/80">
+            <span className="font-bold text-slate-700">Updated Total Amount:</span>
+            <span className="text-xl font-extrabold text-emerald-800">
               {settings.currencySymbol}{totalAmount.toLocaleString()}
             </span>
           </div>
@@ -211,14 +211,14 @@ export const SaleModal: React.FC<SaleModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl font-bold"
+              className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-xl font-bold"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={items.length === 0}
-              className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl font-bold flex items-center justify-center space-x-1"
+              className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold flex items-center justify-center space-x-1 shadow-sm"
             >
               <Save className="w-4 h-4" />
               <span>Update Sale</span>

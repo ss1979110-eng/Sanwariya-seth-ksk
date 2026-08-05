@@ -227,7 +227,7 @@ export default function App() {
   const lowStockCount = products.filter((p) => p.stock <= p.minStockAlert).length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-100 text-slate-900 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
       
       {/* App Header & Navigation */}
       <Header
@@ -326,10 +326,10 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900 border-t border-slate-800 py-4 text-center text-xs text-slate-400">
+      <footer className="bg-emerald-950 border-t border-emerald-900 py-5 text-center text-xs text-emerald-200">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>© {new Date().getFullYear()} {settings.shopName} • Agri Sales & Rate Management</span>
-          <span className="text-[11px] text-slate-400">
+          <span className="font-semibold">© {new Date().getFullYear()} {settings.shopName} • Agri Sales & Rate Management</span>
+          <span className="text-[11px] text-emerald-300">
             Dedicated Sections: Fertilizers (खाद) | Pesticides (कीटनाशक) | Seeds (बीज)
           </span>
         </div>

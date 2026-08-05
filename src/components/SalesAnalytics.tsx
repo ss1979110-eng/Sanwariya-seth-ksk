@@ -276,16 +276,16 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
     <div className="space-y-6">
       
       {/* Analytics Banner */}
-      <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md">
+      <div className="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
         <div>
-          <div className="flex items-center space-x-2 text-emerald-400 font-bold text-xs uppercase tracking-wider mb-1">
+          <div className="flex items-center space-x-2 text-emerald-700 font-extrabold text-xs uppercase tracking-wider mb-1">
             <BarChart3 className="w-4 h-4" />
             <span>Sales Analytics & Growth Graphs • बिक्री विश्लेषण</span>
           </div>
-          <h2 className="text-2xl font-black text-slate-100">
+          <h2 className="text-2xl font-black text-slate-900">
             Monthly & Yearly Sales Performance
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-600 mt-1">
             Track category sales distribution for Fertilizers, Pesticides, and Seeds with custom filters.
           </p>
         </div>
@@ -294,28 +294,28 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
         <div className="flex items-center space-x-2 flex-wrap gap-y-2">
           
           {/* Exact Date Picker */}
-          <div className="flex items-center space-x-1.5 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs">
-            <Calendar className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="text-[10px] text-slate-400 font-bold uppercase hidden sm:inline">Date:</span>
+          <div className="flex items-center space-x-1.5 bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs">
+            <Calendar className="w-3.5 h-3.5 text-emerald-700" />
+            <span className="text-[10px] text-slate-600 font-bold uppercase hidden sm:inline">Date:</span>
             <input
               type="date"
               value={selectedExactDate}
               onChange={(e) => setSelectedExactDate(e.target.value)}
-              className="bg-transparent text-slate-100 font-mono text-xs focus:outline-none cursor-pointer"
+              className="bg-transparent text-slate-900 font-mono text-xs focus:outline-none cursor-pointer"
             />
           </div>
 
           {/* Year Selector */}
-          <div className="flex items-center space-x-1 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs">
-            <span className="text-[10px] text-slate-400 font-bold uppercase hidden sm:inline">Year:</span>
+          <div className="flex items-center space-x-1 bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs">
+            <span className="text-[10px] text-slate-600 font-bold uppercase hidden sm:inline">Year:</span>
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-              className="bg-transparent text-slate-100 font-bold focus:outline-none cursor-pointer"
+              className="bg-transparent text-slate-900 font-bold focus:outline-none cursor-pointer"
             >
-              <option value="all" className="bg-slate-900 text-slate-100">All Years</option>
+              <option value="all" className="bg-white text-slate-900">All Years</option>
               {availableYears.map(yr => (
-                <option key={yr} value={yr} className="bg-slate-900 text-slate-100">
+                <option key={yr} value={yr} className="bg-white text-slate-900">
                   Year {yr}
                 </option>
               ))}
@@ -323,16 +323,16 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
           </div>
 
           {/* Month Selector */}
-          <div className="flex items-center space-x-1 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs">
-            <Filter className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="flex items-center space-x-1 bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs">
+            <Filter className="w-3.5 h-3.5 text-emerald-700" />
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-              className="bg-transparent text-slate-100 font-bold focus:outline-none cursor-pointer"
+              className="bg-transparent text-slate-900 font-bold focus:outline-none cursor-pointer"
             >
-              <option value="all" className="bg-slate-900 text-slate-100">All 12 Months</option>
+              <option value="all" className="bg-white text-slate-900">All 12 Months</option>
               {MONTH_NAMES.map((m, idx) => (
-                <option key={m} value={idx} className="bg-slate-900 text-slate-100">{m}</option>
+                <option key={m} value={idx} className="bg-white text-slate-900">{m}</option>
               ))}
             </select>
           </div>
@@ -347,7 +347,7 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
                 setSelectedCategory('all');
                 setSaleSearch('');
               }}
-              className="flex items-center space-x-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 font-bold px-2.5 py-1.5 rounded-xl text-xs transition-colors"
+              className="flex items-center space-x-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 font-bold px-2.5 py-1.5 rounded-xl text-xs transition-colors"
             >
               <XCircle className="w-3.5 h-3.5" />
               <span>Reset</span>
@@ -357,7 +357,7 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
           {/* Export CSV */}
           <button
             onClick={exportToCSV}
-            className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-colors shadow-sm"
+            className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-colors shadow-sm"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export Report</span>
@@ -369,14 +369,14 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Total Selected Sales */}
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Sales</span>
-            <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Total Sales</span>
+            <div className="p-2 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-200">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-emerald-400">
+          <div className="text-2xl font-black text-emerald-700">
             {settings.currencySymbol}{metrics.totalRev.toLocaleString()}
           </div>
           <p className="text-[10px] text-slate-500 mt-1 font-medium">
@@ -385,14 +385,14 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
         </div>
 
         {/* Fertilizers Revenue */}
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Fertilizers (खाद)</span>
-            <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+            <span className="text-xs font-extrabold text-emerald-800 uppercase tracking-wider">Fertilizers (खाद)</span>
+            <div className="p-2 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-200">
               <Sprout className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-100">
+          <div className="text-2xl font-black text-slate-900">
             {settings.currencySymbol}{metrics.fertRev.toLocaleString()}
           </div>
           <p className="text-[10px] text-slate-500 mt-1 font-medium">
@@ -401,14 +401,14 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
         </div>
 
         {/* Pesticides Revenue */}
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-bold text-rose-400 uppercase tracking-wider">Pesticides (कीटनाशक)</span>
-            <div className="p-2 bg-rose-500/10 text-rose-400 rounded-xl border border-rose-500/20">
+            <span className="text-xs font-extrabold text-rose-700 uppercase tracking-wider">Pesticides (कीटनाशक)</span>
+            <div className="p-2 bg-rose-50 text-rose-700 rounded-xl border border-rose-200">
               <ShieldAlert className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-100">
+          <div className="text-2xl font-black text-slate-900">
             {settings.currencySymbol}{metrics.pestRev.toLocaleString()}
           </div>
           <p className="text-[10px] text-slate-500 mt-1 font-medium">
@@ -417,14 +417,14 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
         </div>
 
         {/* Seeds Revenue */}
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Seeds (बीज)</span>
-            <div className="p-2 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
+            <span className="text-xs font-extrabold text-amber-700 uppercase tracking-wider">Seeds (बीज)</span>
+            <div className="p-2 bg-amber-50 text-amber-700 rounded-xl border border-amber-200">
               <Wheat className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-100">
+          <div className="text-2xl font-black text-slate-900">
             {settings.currencySymbol}{metrics.seedRev.toLocaleString()}
           </div>
           <p className="text-[10px] text-slate-500 mt-1 font-medium">
@@ -438,16 +438,16 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Yearly / Daily Sales Trend Graph */}
-        <div className="lg:col-span-8 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
+        <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="font-extrabold text-slate-100 text-base flex items-center space-x-2">
+              <h3 className="font-extrabold text-slate-900 text-base flex items-center space-x-2">
                 <span>{chartViewMode === 'daily' ? 'Exact Date Daily Sales Graph' : 'Yearly Monthly Sales Trend'}</span>
-                <span className="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">
+                <span className="text-[10px] bg-emerald-50 text-emerald-800 font-bold px-2 py-0.5 rounded-full border border-emerald-200">
                   {chartViewMode === 'daily' ? `${dailyChartData.length} Recorded Date(s)` : `Year ${selectedYear}`}
                 </span>
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 {chartViewMode === 'daily' 
                   ? 'Day-by-day exact date sales breakdown across Fertilizers, Pesticides, and Seeds'
                   : 'Monthly breakdown across Fertilizers, Pesticides, and Seeds'}
@@ -455,11 +455,11 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
             </div>
 
             {/* View Mode Toggle Switch */}
-            <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700/80 self-start sm:self-auto shrink-0">
+            <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 self-start sm:self-auto shrink-0">
               <button
                 onClick={() => setChartViewMode('daily')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                  chartViewMode === 'daily' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+                  chartViewMode === 'daily' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Exact Date (Daily)
@@ -467,7 +467,7 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
               <button
                 onClick={() => setChartViewMode('monthly')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                  chartViewMode === 'monthly' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+                  chartViewMode === 'monthly' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Monthly Trend
@@ -479,11 +479,11 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
             <ResponsiveContainer width="100%" height="100%">
               {chartViewMode === 'daily' ? (
                 <BarChart data={dailyChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
-                  <XAxis dataKey="displayDate" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} tickFormatter={(v) => `₹${v}`} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.8} />
+                  <XAxis dataKey="displayDate" stroke="#64748b" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#64748b" fontSize={11} tickLine={false} tickFormatter={(v) => `₹${v}`} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                    contentStyle={{ backgroundColor: '#ffffff', borderColor: '#cbd5e1', borderRadius: '12px', fontSize: '12px', color: '#0f172a', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
                     labelFormatter={(label, items) => {
                       const item = items && items[0] ? items[0].payload : null;
                       return item ? `Exact Date: ${item.dateStr}` : label;
@@ -497,11 +497,11 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
                 </BarChart>
               ) : (
                 <BarChart data={yearlyChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
-                  <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} tickFormatter={(v) => `₹${v / 1000}k`} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.8} />
+                  <XAxis dataKey="month" stroke="#64748b" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#64748b" fontSize={11} tickLine={false} tickFormatter={(v) => `₹${v / 1000}k`} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                    contentStyle={{ backgroundColor: '#ffffff', borderColor: '#cbd5e1', borderRadius: '12px', fontSize: '12px', color: '#0f172a', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
                     formatter={(value: any) => [`${settings.currencySymbol}${Number(value).toLocaleString()}`, '']}
                   />
                   <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
@@ -515,10 +515,10 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
         </div>
 
         {/* Category Share Donut Chart */}
-        <div className="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col justify-between space-y-4">
+        <div className="lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between space-y-4">
           <div>
-            <h3 className="font-extrabold text-slate-100 text-base">Category Sales Ratio</h3>
-            <p className="text-xs text-slate-400">Revenue split across agri categories</p>
+            <h3 className="font-extrabold text-slate-900 text-base">Category Sales Ratio</h3>
+            <p className="text-xs text-slate-500">Revenue split across agri categories</p>
           </div>
 
           <div className="h-56 w-full flex items-center justify-center relative">
@@ -538,7 +538,7 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
                   ))}
                 </Pie>
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#ffffff', borderColor: '#cbd5e1', borderRadius: '12px', fontSize: '12px', color: '#0f172a', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
                   formatter={(val: any) => [`${settings.currencySymbol}${Number(val).toLocaleString()}`, 'Sales']}
                 />
               </PieChart>
@@ -546,11 +546,11 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
           </div>
 
           {/* Custom Legend */}
-          <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-800">
+          <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-100">
             {categoryPieData.map((cat) => (
               <div key={cat.name} className="flex items-center space-x-2">
                 <span className="w-3 h-3 rounded-full" style={{ backgroundColor: cat.color }} />
-                <span className="text-slate-300 font-medium text-[11px] truncate">{cat.name}</span>
+                <span className="text-slate-700 font-medium text-[11px] truncate">{cat.name}</span>
               </div>
             ))}
           </div>
@@ -559,33 +559,33 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
       </div>
 
       {/* Top Products Ranking */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
         <div>
-          <h3 className="font-extrabold text-slate-100 text-base">Top Revenue Generating Products</h3>
-          <p className="text-xs text-slate-400">Highest grossing items in {selectedYear}</p>
+          <h3 className="font-extrabold text-slate-900 text-base">Top Revenue Generating Products</h3>
+          <p className="text-xs text-slate-500">Highest grossing items in {selectedYear}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {topProductsData.map((prod, idx) => (
             <div
               key={prod.name}
-              className="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60 flex items-center justify-between"
+              className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex items-center justify-between"
             >
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-extrabold text-xs">
+                <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center justify-center font-extrabold text-xs">
                   #{idx + 1}
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-200 text-xs line-clamp-1">{prod.name}</h4>
-                  <span className="text-[10px] text-slate-400 uppercase font-semibold">{prod.category}</span>
+                  <h4 className="font-bold text-slate-900 text-xs line-clamp-1">{prod.name}</h4>
+                  <span className="text-[10px] text-slate-500 uppercase font-semibold">{prod.category}</span>
                 </div>
               </div>
 
               <div className="text-right">
-                <div className="font-extrabold text-emerald-400 text-xs">
+                <div className="font-black text-emerald-700 text-xs">
                   {settings.currencySymbol}{prod.totalSales.toLocaleString()}
                 </div>
-                <div className="text-[10px] text-slate-400">{prod.qty} units sold</div>
+                <div className="text-[10px] text-slate-500">{prod.qty} units sold</div>
               </div>
             </div>
           ))}
@@ -593,16 +593,16 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
       </div>
 
       {/* Sales Transactions & Edit Table for Selected Year */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div>
             <div className="flex items-center space-x-2">
-              <Receipt className="w-5 h-5 text-emerald-400" />
-              <h3 className="font-extrabold text-slate-100 text-base">
+              <Receipt className="w-5 h-5 text-emerald-700" />
+              <h3 className="font-extrabold text-slate-900 text-base">
                 Sales Records & Edit Options ({selectedYear})
               </h3>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 mt-0.5">
               Select or edit past sale records for Year {selectedYear}
             </p>
           </div>
@@ -615,13 +615,13 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
                 value={saleSearch}
                 onChange={(e) => setSaleSearch(e.target.value)}
                 placeholder="Search Bill # or Customer..."
-                className="bg-slate-800 border border-slate-700 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500"
+                className="bg-slate-50 border border-slate-300 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"
               />
             </div>
             {searchedTransactions.length > 30 && (
               <button
                 onClick={() => setShowAllList(!showAllList)}
-                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 rounded-xl text-xs font-bold transition-colors whitespace-nowrap"
+                className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-emerald-800 border border-slate-300 rounded-xl text-xs font-bold transition-colors whitespace-nowrap"
               >
                 {showAllList ? 'Show Top 30' : `Show All (${searchedTransactions.length})`}
               </button>
@@ -630,8 +630,8 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-800/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-700">
+          <table className="w-full text-left text-xs text-slate-700">
+            <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] tracking-wider border-b border-slate-200">
               <tr>
                 <th className="py-3 px-4">Bill No & Date</th>
                 <th className="py-3 px-4">Customer</th>
@@ -641,39 +641,39 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-slate-100">
               {displayedTransactionsList.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-slate-500 font-medium">
+                  <td colSpan={6} className="py-8 text-center text-slate-400 font-medium">
                     No sales records found for Year {selectedYear}.
                   </td>
                 </tr>
               ) : (
                 displayedTransactionsList.map((tx) => (
-                  <tr key={tx.id} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="py-3 px-4 font-bold text-slate-100">
-                      <div className="font-mono text-emerald-400">{tx.billNumber}</div>
-                      <div className="text-[10px] text-slate-400">{tx.date}</div>
+                  <tr key={tx.id} className="hover:bg-slate-50 transition-colors">
+                    <td className="py-3 px-4 font-bold text-slate-900">
+                      <div className="font-mono text-emerald-700 font-extrabold">{tx.billNumber}</div>
+                      <div className="text-[10px] text-slate-500">{tx.date}</div>
                     </td>
 
                     <td className="py-3 px-4">
-                      <div className="font-bold text-slate-200">{tx.customerName || 'Walk-in'}</div>
+                      <div className="font-bold text-slate-900">{tx.customerName || 'Walk-in'}</div>
                       <div className="text-[10px] text-slate-500">{tx.customerPhone || ''}</div>
                     </td>
 
                     <td className="py-3 px-4">
-                      <div className="text-slate-300 font-medium line-clamp-2">
+                      <div className="text-slate-600 font-medium line-clamp-2">
                         {tx.items.map(i => `${i.productName} (x${i.quantity})`).join(', ')}
                       </div>
                     </td>
 
                     <td className="py-3 px-4">
-                      <span className="bg-slate-800 px-2 py-0.5 rounded border border-slate-700 text-[10px] font-bold">
+                      <span className="bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px] font-bold text-slate-700">
                         {tx.paymentMethod}
                       </span>
                     </td>
 
-                    <td className="py-3 px-4 font-extrabold text-emerald-400 text-sm">
+                    <td className="py-3 px-4 font-black text-emerald-700 text-sm">
                       {settings.currencySymbol}{tx.totalAmount.toLocaleString()}
                     </td>
 
@@ -681,7 +681,7 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
                       {onOpenEditSaleModal && (
                         <button
                           onClick={() => onOpenEditSaleModal(tx)}
-                          className="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-300 border border-emerald-500/30 rounded text-xs font-bold inline-flex items-center space-x-1 transition-colors"
+                          className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded text-xs font-bold inline-flex items-center space-x-1 transition-colors"
                         >
                           <Edit className="w-3 h-3" />
                           <span>Edit</span>
@@ -694,7 +694,7 @@ export const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({
                               onDeleteTransaction(tx.id);
                             }
                           }}
-                          className="px-2 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded text-xs font-bold inline-flex items-center space-x-1 transition-colors"
+                          className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded text-xs font-bold inline-flex items-center space-x-1 transition-colors"
                         >
                           <Trash2 className="w-3 h-3" />
                           <span>Delete</span>

@@ -129,7 +129,7 @@ export const RateBoard: React.FC<RateBoardProps> = ({
       </div>
 
       {/* Filter and Search Controls */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/90 p-4 rounded-xl border border-slate-800 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         {/* Category Tabs */}
         <div className="flex items-center space-x-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
           <button
@@ -137,7 +137,7 @@ export const RateBoard: React.FC<RateBoardProps> = ({
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
               selectedCategory === 'all'
                 ? 'bg-emerald-600 text-white shadow-sm'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
             }`}
           >
             All Products ({products.length})
@@ -149,7 +149,7 @@ export const RateBoard: React.FC<RateBoardProps> = ({
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
                 selectedCategory === cat.id
                   ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
               {cat.name.split(' ')[0]} ({countByCategory(cat.id)})
@@ -165,16 +165,16 @@ export const RateBoard: React.FC<RateBoardProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search fertilizer, seed name, brand..."
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full bg-slate-50 border border-slate-300 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
       </div>
 
       {/* Main Grid of Products & Rates */}
       {filteredProducts.length === 0 ? (
-        <div className="text-center py-12 bg-slate-900/50 rounded-2xl border border-slate-800 p-8">
-          <Layers className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-slate-300">No products found</h3>
+        <div className="text-center py-12 bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+          <Layers className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+          <h3 className="text-base font-bold text-slate-700">No products found</h3>
           <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
             Try adjusting your search terms or filter selection. As Admin, you can add new items anytime.
           </p>
@@ -188,20 +188,20 @@ export const RateBoard: React.FC<RateBoardProps> = ({
             return (
               <div
                 key={product.id}
-                className="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative"
+                className="bg-white border border-slate-200/90 hover:border-emerald-400 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative"
               >
                 <div>
                   {/* Top Header Row */}
                   <div className="flex items-start justify-between gap-2 mb-3">
                     <div className="flex items-center space-x-2">
-                      <div className="p-2 bg-slate-800 rounded-xl border border-slate-700">
+                      <div className="p-2 bg-slate-50 rounded-xl border border-slate-200">
                         {getCategoryIcon(product.category)}
                       </div>
                       <div>
-                        <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">
+                        <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">
                           {product.brand || 'Standard Agri'}
                         </span>
-                        <h3 className="font-bold text-slate-100 text-sm leading-snug group-hover:text-emerald-400 transition-colors">
+                        <h3 className="font-extrabold text-slate-900 text-sm leading-snug group-hover:text-emerald-700 transition-colors">
                           {product.name}
                         </h3>
                       </div>
@@ -211,7 +211,7 @@ export const RateBoard: React.FC<RateBoardProps> = ({
                     {isAdmin && onEditProductRate && (
                       <button
                         onClick={() => onEditProductRate(product)}
-                        className="p-1.5 bg-slate-800 hover:bg-emerald-600 hover:text-white text-slate-400 rounded-lg transition-colors"
+                        className="p-1.5 bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-600 rounded-lg transition-colors"
                         title="Edit Product Rate & Details"
                       >
                         <Edit3 className="w-3.5 h-3.5" />
@@ -222,39 +222,39 @@ export const RateBoard: React.FC<RateBoardProps> = ({
                   {/* Chemical Formula / Spec Tag */}
                   {product.chemicalFormula && (
                     <div className="mb-3">
-                      <span className="inline-block bg-slate-800/80 text-emerald-300 text-[11px] font-mono px-2.5 py-0.5 rounded-md border border-slate-700/80">
+                      <span className="inline-block bg-emerald-50 text-emerald-800 text-[11px] font-mono px-2.5 py-0.5 rounded-md border border-emerald-200 font-semibold">
                         {product.chemicalFormula}
                       </span>
                     </div>
                   )}
 
                   {product.description && (
-                    <p className="text-xs text-slate-400 line-clamp-2 mb-4">
+                    <p className="text-xs text-slate-600 line-clamp-2 mb-4">
                       {product.description}
                     </p>
                   )}
                 </div>
 
                 {/* Price & Stock Footer Box */}
-                <div className="pt-3 border-t border-slate-800/80 mt-2 space-y-3">
+                <div className="pt-3 border-t border-slate-100 mt-2 space-y-3">
                   
                   <div className="flex items-end justify-between">
                     <div>
-                      <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium block">
+                      <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold block">
                         Selling Rate (मूल्य)
                       </span>
                       <div className="flex items-baseline space-x-1.5">
-                        <span className="text-xl font-extrabold text-emerald-400">
+                        <span className="text-xl font-black text-emerald-700">
                           {settings.currencySymbol}{product.rate.toLocaleString()}
                         </span>
-                        <span className="text-xs text-slate-400 font-medium">
+                        <span className="text-xs text-slate-500 font-medium">
                           / {product.unit}
                         </span>
                       </div>
                       {product.mrp && product.mrp > product.rate && (
-                        <div className="text-[11px] text-slate-500 space-x-1">
+                        <div className="text-[11px] text-slate-400 space-x-1">
                           <span className="line-through">{settings.currencySymbol}{product.mrp}</span>
-                          <span className="text-emerald-400 font-bold">
+                          <span className="text-emerald-700 font-bold">
                             Save {settings.currencySymbol}{product.mrp - product.rate}
                           </span>
                         </div>
@@ -264,17 +264,17 @@ export const RateBoard: React.FC<RateBoardProps> = ({
                     {/* Stock Status Badge */}
                     <div className="text-right">
                       {isOutOfStock ? (
-                        <span className="inline-flex items-center space-x-1 text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded-md">
+                        <span className="inline-flex items-center space-x-1 text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 rounded-md">
                           <AlertTriangle className="w-3 h-3" />
                           <span>Out of Stock</span>
                         </span>
                       ) : isLowStock ? (
-                        <span className="inline-flex items-center space-x-1 text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-md">
+                        <span className="inline-flex items-center space-x-1 text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md">
                           <AlertTriangle className="w-3 h-3" />
                           <span>{product.stock} Left</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center space-x-1 text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                        <span className="inline-flex items-center space-x-1 text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-md">
                           <CheckCircle2 className="w-3 h-3" />
                           <span>Stock: {product.stock}</span>
                         </span>
@@ -289,8 +289,8 @@ export const RateBoard: React.FC<RateBoardProps> = ({
                       disabled={isOutOfStock}
                       className={`w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${
                         isOutOfStock
-                          ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                          : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm'
+                          ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                          : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm'
                       }`}
                     >
                       <span>Record Sale for Item</span>

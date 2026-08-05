@@ -188,16 +188,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     <div className="space-y-6">
       
       {/* Admin Panel Header Banner */}
-      <div className="bg-slate-900 p-6 rounded-2xl border border-amber-500/30 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden">
+      <div className="bg-white p-6 rounded-2xl border border-amber-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden">
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
         
         <div>
-          <div className="flex items-center space-x-2 text-amber-400 font-bold text-xs uppercase tracking-wider mb-1">
+          <div className="flex items-center space-x-2 text-amber-700 font-bold text-xs uppercase tracking-wider mb-1">
             <ShieldCheck className="w-4 h-4" />
             <span>Authenticated Owner Portal • एडमिन पैनल</span>
           </div>
-          <h2 className="text-2xl font-black text-slate-100">AgriShop Admin Controls</h2>
-          <p className="text-xs text-slate-300 mt-1">
+          <h2 className="text-2xl font-black text-slate-900">AgriShop Admin Controls</h2>
+          <p className="text-xs text-slate-600 mt-1">
             Add/edit product rates, customize categories, modify past sales records, and configure security PIN.
           </p>
         </div>
@@ -206,23 +206,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       <div className="space-y-4">
         
         {/* Today's Sales Admin Action Banner */}
-        <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-900 p-4 sm:p-5 rounded-2xl border border-emerald-500/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-emerald-50 p-4 sm:p-5 rounded-2xl border border-emerald-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-600/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0">
               <DollarSign className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="text-[10px] uppercase font-black tracking-wider text-emerald-400 bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                <span className="text-[10px] uppercase font-black tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">
                   Today ({todayDateStr})
                 </span>
-                <span className="text-xs text-slate-400 font-medium">
+                <span className="text-xs text-slate-600 font-medium">
                   {todayTransactions.length} transaction(s) recorded
                 </span>
               </div>
               <div className="flex items-baseline space-x-2 mt-0.5">
-                <span className="text-xs text-slate-300 font-bold">Total Today's Sale:</span>
-                <span className="text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight">
+                <span className="text-xs text-slate-700 font-bold">Total Today's Sale:</span>
+                <span className="text-2xl sm:text-3xl font-black text-emerald-800 tracking-tight">
                   {settings.currencySymbol}{todayTotalSalesAmount.toLocaleString()}
                 </span>
               </div>
@@ -232,7 +232,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="flex items-center space-x-2 w-full sm:w-auto">
             <button
               onClick={() => setIsTodaySalesModalOpen(true)}
-              className="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl text-xs flex items-center justify-center space-x-2 shadow-lg shadow-emerald-950/50 transition-colors"
+              className="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center justify-center space-x-2 shadow-sm transition-colors"
             >
               <Edit3 className="w-4 h-4" />
               <span>Edit Today's Sales</span>
@@ -241,9 +241,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {onOpenQuickPOS && (
               <button
                 onClick={onOpenQuickPOS}
-                className="flex-1 sm:flex-none px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors"
+                className="flex-1 sm:flex-none px-3.5 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors shadow-sm"
               >
-                <Plus className="w-4 h-4 text-emerald-400" />
+                <Plus className="w-4 h-4 text-emerald-700" />
                 <span>New Sale</span>
               </button>
             )}
@@ -251,11 +251,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
 
         {/* Tab Navigation Controls */}
-        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex-wrap gap-1 shadow-md">
+        <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200 flex-wrap gap-1 shadow-inner">
           <button
             onClick={() => setActiveTab('products')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
-              activeTab === 'products' ? 'bg-amber-500 text-slate-950 shadow-md font-black' : 'text-slate-300 hover:bg-slate-800'
+              activeTab === 'products' ? 'bg-amber-500 text-white shadow-sm font-black' : 'text-slate-700 hover:bg-slate-200'
             }`}
           >
             <Tag className="w-3.5 h-3.5" />
@@ -265,7 +265,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <button
             onClick={() => setActiveTab('categories')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
-              activeTab === 'categories' ? 'bg-amber-500 text-slate-950 shadow-md font-black' : 'text-slate-300 hover:bg-slate-800'
+              activeTab === 'categories' ? 'bg-amber-500 text-white shadow-sm font-black' : 'text-slate-700 hover:bg-slate-200'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -275,7 +275,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <button
             onClick={() => setActiveTab('sales')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
-              activeTab === 'sales' ? 'bg-amber-500 text-slate-950 shadow-md font-black' : 'text-slate-300 hover:bg-slate-800'
+              activeTab === 'sales' ? 'bg-amber-500 text-white shadow-sm font-black' : 'text-slate-700 hover:bg-slate-200'
             }`}
           >
             <Receipt className="w-3.5 h-3.5" />
@@ -285,7 +285,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <button
             onClick={() => setActiveTab('settings')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
-              activeTab === 'settings' ? 'bg-amber-500 text-slate-950 shadow-md font-black' : 'text-slate-300 hover:bg-slate-800'
+              activeTab === 'settings' ? 'bg-amber-500 text-white shadow-sm font-black' : 'text-slate-700 hover:bg-slate-200'
             }`}
           >
             <Settings className="w-3.5 h-3.5" />
@@ -299,13 +299,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {activeTab === 'products' && (
         <div className="space-y-4">
           
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900 p-4 rounded-xl border border-slate-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
             {/* Category Filter Pills */}
             <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
               <button
                 onClick={() => setProdCategory('all')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold ${
-                  prodCategory === 'all' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300'
+                  prodCategory === 'all' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 All ({products.length})
@@ -313,7 +313,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <button
                 onClick={() => setProdCategory('fertilizers')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold ${
-                  prodCategory === 'fertilizers' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300'
+                  prodCategory === 'fertilizers' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 Fertilizers
@@ -321,7 +321,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <button
                 onClick={() => setProdCategory('pesticides')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold ${
-                  prodCategory === 'pesticides' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300'
+                  prodCategory === 'pesticides' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 Pesticides
@@ -329,7 +329,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <button
                 onClick={() => setProdCategory('seeds')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold ${
-                  prodCategory === 'seeds' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300'
+                  prodCategory === 'seeds' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 Seeds
@@ -344,13 +344,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   value={prodSearch}
                   onChange={(e) => setProdSearch(e.target.value)}
                   placeholder="Filter products..."
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-2 py-1 text-xs text-slate-100"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-2 py-1 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
 
               <button
                 onClick={onOpenAddProductModal}
-                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center space-x-1 shrink-0"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg text-xs flex items-center space-x-1 shrink-0 shadow-sm"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Product</span>
@@ -359,10 +359,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
 
           {/* Products Admin Table */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-800/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-700">
+              <table className="w-full text-left text-xs text-slate-700">
+                <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-200 font-bold">
                   <tr>
                     <th className="py-3 px-4">Product Name & Category</th>
                     <th className="py-3 px-4">Brand / Spec</th>
@@ -372,17 +372,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-slate-100">
                   {filteredProducts.map((p) => (
-                    <tr key={p.id} className="hover:bg-slate-800/40 transition-colors">
-                      <td className="py-3 px-4 font-bold text-slate-100">
+                    <tr key={p.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="py-3 px-4 font-bold text-slate-900">
                         <div>{p.name}</div>
-                        <span className="text-[10px] text-emerald-400 font-mono uppercase">{p.category}</span>
+                        <span className="text-[10px] text-emerald-700 font-mono uppercase">{p.category}</span>
                       </td>
 
                       <td className="py-3 px-4">
-                        <div className="text-slate-200">{p.brand || '—'}</div>
-                        <div className="text-[10px] text-slate-400 font-mono">{p.chemicalFormula || ''}</div>
+                        <div className="text-slate-800 font-medium">{p.brand || '—'}</div>
+                        <div className="text-[10px] text-slate-500 font-mono">{p.chemicalFormula || ''}</div>
                       </td>
 
                       {/* Selling Rate Column with Quick Inline Edit */}
@@ -393,11 +393,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                               type="number"
                               value={inlineRateValue}
                               onChange={(e) => setInlineRateValue(Number(e.target.value))}
-                              className="w-20 bg-slate-950 border border-emerald-500 text-emerald-400 font-extrabold px-1.5 py-0.5 rounded text-xs"
+                              className="w-20 bg-white border border-emerald-500 text-emerald-800 font-black px-1.5 py-0.5 rounded text-xs focus:outline-none"
                             />
                             <button
                               onClick={() => handleInlineRateSave(p)}
-                              className="p-1 bg-emerald-500 text-slate-950 rounded hover:bg-emerald-400"
+                              className="p-1 bg-emerald-600 text-white rounded hover:bg-emerald-700 shadow-sm"
                               title="Save Rate"
                             >
                               <Check className="w-3.5 h-3.5" />
@@ -405,7 +405,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           </div>
                         ) : (
                           <div className="flex items-center space-x-1.5">
-                            <span className="text-sm font-extrabold text-emerald-400">
+                            <span className="text-sm font-extrabold text-emerald-800">
                               {settings.currencySymbol}{p.rate}
                             </span>
                             <button
@@ -413,7 +413,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                 setEditingRateId(p.id);
                                 setInlineRateValue(p.rate);
                               }}
-                              className="text-slate-500 hover:text-amber-400 p-0.5"
+                              className="text-slate-400 hover:text-amber-600 p-0.5"
                               title="Quick Change Rate"
                             >
                               <Edit3 className="w-3 h-3" />
@@ -423,24 +423,24 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       </td>
 
                       <td className="py-3 px-4">
-                        <div>{p.unit}</div>
+                        <div className="font-medium text-slate-800">{p.unit}</div>
                         {p.mrp && <div className="text-[10px] text-slate-500">MRP: {settings.currencySymbol}{p.mrp}</div>}
                       </td>
 
                       <td className="py-3 px-4 font-bold">
                         {p.stock <= p.minStockAlert ? (
-                          <span className="text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30 text-[10px]">
+                          <span className="text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 text-[10px]">
                             ⚠️ {p.stock} (Low)
                           </span>
                         ) : (
-                          <span className="text-emerald-400">{p.stock} units</span>
+                          <span className="text-emerald-700 font-bold">{p.stock} units</span>
                         )}
                       </td>
 
                       <td className="py-3 px-4 text-right space-x-2">
                         <button
                           onClick={() => onUpdateProduct(p)}
-                          className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-bold"
+                          className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[11px] font-bold"
                         >
                           Edit
                         </button>
@@ -450,7 +450,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                               onDeleteProduct(p.id);
                             }
                           }}
-                          className="px-2 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded text-[11px] font-bold"
+                          className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded text-[11px] font-bold"
                         >
                           Delete
                         </button>
@@ -475,33 +475,33 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             return (
               <div
                 key={cat.id}
-                className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col justify-between space-y-4"
+                className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between space-y-4"
               >
                 <div>
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
                     <div className="flex items-center space-x-2">
-                      <div className="p-2 bg-slate-800 rounded-xl">
-                        {cat.id === 'fertilizers' ? <Sprout className="w-5 h-5 text-emerald-500" /> : cat.id === 'pesticides' ? <ShieldAlert className="w-5 h-5 text-rose-500" /> : <Wheat className="w-5 h-5 text-amber-500" />}
+                      <div className="p-2 bg-slate-100 rounded-xl">
+                        {cat.id === 'fertilizers' ? <Sprout className="w-5 h-5 text-emerald-600" /> : cat.id === 'pesticides' ? <ShieldAlert className="w-5 h-5 text-rose-600" /> : <Wheat className="w-5 h-5 text-amber-600" />}
                       </div>
                       <div>
-                        <h3 className="font-extrabold text-slate-100 text-base">{cat.name}</h3>
-                        <span className="text-[10px] text-slate-400 font-mono">{stats.count} Products Registered</span>
+                        <h3 className="font-extrabold text-slate-900 text-base">{cat.name}</h3>
+                        <span className="text-[10px] text-slate-500 font-mono">{stats.count} Products Registered</span>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate-400 mb-4">{cat.description}</p>
+                  <p className="text-xs text-slate-600 mb-4">{cat.description}</p>
 
-                  <div className="grid grid-cols-2 gap-2 bg-slate-800/60 p-3 rounded-xl border border-slate-700/60 text-xs mb-4">
+                  <div className="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs mb-4">
                     <div>
-                      <span className="text-[10px] text-slate-400 block uppercase font-bold">Category Stock Value</span>
-                      <span className="text-sm font-extrabold text-emerald-400">
+                      <span className="text-[10px] text-slate-500 block uppercase font-bold">Category Stock Value</span>
+                      <span className="text-sm font-extrabold text-emerald-800">
                         {settings.currencySymbol}{stats.totalVal.toLocaleString()}
                       </span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 block uppercase font-bold">Low Stock Items</span>
-                      <span className={`text-sm font-extrabold ${stats.lowStock > 0 ? 'text-amber-400' : 'text-slate-300'}`}>
+                      <span className="text-[10px] text-slate-500 block uppercase font-bold">Low Stock Items</span>
+                      <span className={`text-sm font-extrabold ${stats.lowStock > 0 ? 'text-amber-700' : 'text-slate-700'}`}>
                         {stats.lowStock} Items
                       </span>
                     </div>
@@ -510,13 +510,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   {/* List of products in this category */}
                   <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
                     {categoryProducts.map(p => (
-                      <div key={p.id} className="flex justify-between items-center text-xs bg-slate-800/40 p-2 rounded-lg border border-slate-700/40">
+                      <div key={p.id} className="flex justify-between items-center text-xs bg-slate-50 p-2 rounded-lg border border-slate-200">
                         <div>
-                          <div className="font-bold text-slate-200 line-clamp-1">{p.name}</div>
-                          <div className="text-[10px] text-slate-400">{p.unit}</div>
+                          <div className="font-bold text-slate-900 line-clamp-1">{p.name}</div>
+                          <div className="text-[10px] text-slate-500">{p.unit}</div>
                         </div>
                         <div className="text-right">
-                          <div className="font-extrabold text-emerald-400">{settings.currencySymbol}{p.rate}</div>
+                          <div className="font-extrabold text-emerald-800">{settings.currencySymbol}{p.rate}</div>
                           <div className="text-[10px] text-slate-500">Stock: {p.stock}</div>
                         </div>
                       </div>
@@ -526,7 +526,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                 <button
                   onClick={onOpenAddProductModal}
-                  className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 py-2 rounded-xl text-xs font-bold border border-slate-700 flex items-center justify-center space-x-1"
+                  className="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 py-2 rounded-xl text-xs font-bold border border-slate-200 flex items-center justify-center space-x-1"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Product to {cat.name.split(' ')[0]}</span>
@@ -541,15 +541,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {activeTab === 'sales' && (
         <div className="space-y-4">
           
-          <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <div className="bg-white p-4 rounded-2xl border border-slate-200 space-y-3 shadow-sm">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div className="flex items-center space-x-2">
-                <Receipt className="w-5 h-5 text-emerald-400" />
-                <h3 className="text-sm font-extrabold text-slate-100">
+                <Receipt className="w-5 h-5 text-emerald-700" />
+                <h3 className="text-sm font-extrabold text-slate-900">
                   Search & Filter Sales Logs
                 </h3>
               </div>
-              <span className="text-xs text-slate-400 font-medium">
+              <span className="text-xs text-slate-500 font-medium">
                 Showing {displayedSales.length} of {filteredSales.length} matching sale log(s)
               </span>
             </div>
@@ -563,19 +563,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   value={salesSearch}
                   onChange={(e) => setSalesSearch(e.target.value)}
                   placeholder="Search Name, Phone, Bill #, Product..."
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
 
               {/* Specific Date Picker Filter */}
-              <div className="flex items-center space-x-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-xl text-xs text-slate-200">
-                <Calendar className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-[10px] text-slate-400 font-bold uppercase hidden sm:inline">Date:</span>
+              <div className="flex items-center space-x-1.5 bg-slate-50 border border-slate-300 px-2.5 py-1 rounded-xl text-xs text-slate-800">
+                <Calendar className="w-3.5 h-3.5 text-emerald-700" />
+                <span className="text-[10px] text-slate-500 font-bold uppercase hidden sm:inline">Date:</span>
                 <input
                   type="date"
                   value={salesDateFilter}
                   onChange={(e) => setSalesDateFilter(e.target.value)}
-                  className="bg-transparent text-xs text-slate-100 font-mono focus:outline-none"
+                  className="bg-transparent text-xs text-slate-900 font-mono focus:outline-none"
                 />
               </div>
 
@@ -583,7 +583,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <select
                 value={salesMonthFilter}
                 onChange={(e) => setSalesMonthFilter(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
+                className="bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="all">All Months</option>
                 <option value={0}>Jan (जनवरी)</option>
@@ -604,7 +604,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <select
                 value={salesYearFilter}
                 onChange={(e) => setSalesYearFilter(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
+                className="bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="all">All Years</option>
                 {availableYears.map(yr => (
@@ -616,7 +616,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <select
                 value={salesCategoryFilter}
                 onChange={(e) => setSalesCategoryFilter(e.target.value as ProductCategory | 'all')}
-                className="bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
+                className="bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="all">All Categories</option>
                 <option value="fertilizers">Fertilizers</option>
@@ -635,7 +635,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     setSalesMonthFilter('all');
                     setSalesCategoryFilter('all');
                   }}
-                  className="px-2.5 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 rounded-xl text-xs font-bold flex items-center space-x-1 transition-colors"
+                  className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold flex items-center space-x-1 transition-colors"
                 >
                   <XCircle className="w-3.5 h-3.5" />
                   <span>Reset Filters</span>
@@ -643,12 +643,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               )}
             </div>
 
-            <div className="flex items-center justify-between md:justify-end gap-3 text-xs text-slate-400 font-bold pt-2 border-t border-slate-800">
+            <div className="flex items-center justify-between md:justify-end gap-3 text-xs text-slate-500 font-bold pt-2 border-t border-slate-100">
               <span>Showing {displayedSales.length} of {filteredSales.length} logs</span>
               {filteredSales.length > 50 && (
                 <button
                   onClick={() => setShowAllSales(!showAllSales)}
-                  className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 rounded text-xs transition-colors"
+                  className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-emerald-800 border border-slate-200 rounded text-xs transition-colors"
                 >
                   {showAllSales ? 'Show Top 50' : `Show All (${filteredSales.length})`}
                 </button>
@@ -656,10 +656,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-800/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-700">
+              <table className="w-full text-left text-xs text-slate-700">
+                <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-200 font-bold">
                   <tr>
                     <th className="py-3 px-4">Bill No & Date</th>
                     <th className="py-3 px-4">Farmer / Customer</th>
@@ -669,39 +669,39 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-slate-100">
                   {displayedSales.map((tx) => (
-                    <tr key={tx.id} className="hover:bg-slate-800/40 transition-colors">
-                      <td className="py-3 px-4 font-bold text-slate-100">
-                        <div className="font-mono text-emerald-400">{tx.billNumber}</div>
-                        <div className="text-[10px] text-slate-400">{tx.date}</div>
+                    <tr key={tx.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="py-3 px-4 font-bold text-slate-900">
+                        <div className="font-mono text-emerald-700 font-extrabold">{tx.billNumber}</div>
+                        <div className="text-[10px] text-slate-500">{tx.date}</div>
                       </td>
 
                       <td className="py-3 px-4">
-                        <div className="font-bold text-slate-200">{tx.customerName || 'Walk-in'}</div>
+                        <div className="font-bold text-slate-900">{tx.customerName || 'Walk-in'}</div>
                         <div className="text-[10px] text-slate-500">{tx.customerPhone || ''}</div>
                       </td>
 
                       <td className="py-3 px-4">
-                        <div className="text-slate-300 font-medium">
+                        <div className="text-slate-700 font-medium">
                           {tx.items.map(i => `${i.productName} (x${i.quantity})`).join(', ')}
                         </div>
                       </td>
 
                       <td className="py-3 px-4">
-                        <span className="bg-slate-800 px-2 py-0.5 rounded border border-slate-700 text-[10px] font-bold">
+                        <span className="bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px] font-bold text-slate-700">
                           {tx.paymentMethod}
                         </span>
                       </td>
 
-                      <td className="py-3 px-4 font-extrabold text-emerald-400 text-sm">
+                      <td className="py-3 px-4 font-extrabold text-emerald-800 text-sm">
                         {settings.currencySymbol}{tx.totalAmount.toLocaleString()}
                       </td>
 
                       <td className="py-3 px-4 text-right space-x-2">
                         <button
                           onClick={() => onOpenEditSaleModal(tx)}
-                          className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-bold"
+                          className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[11px] font-bold"
                         >
                           Edit
                         </button>
@@ -711,7 +711,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                               onDeleteTransaction(tx.id);
                             }
                           }}
-                          className="px-2 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded text-[11px] font-bold"
+                          className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded text-[11px] font-bold"
                         >
                           Delete
                         </button>
@@ -731,9 +731,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
           {/* Settings Form */}
-          <div className="lg:col-span-8 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-4">
-            <h3 className="text-lg font-extrabold text-slate-100 flex items-center space-x-2">
-              <Settings className="w-5 h-5 text-amber-400" />
+          <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+            <h3 className="text-lg font-extrabold text-slate-900 flex items-center space-x-2">
+              <Settings className="w-5 h-5 text-amber-600" />
               <span>Shop Configuration & Security PIN</span>
             </h3>
 
@@ -741,75 +741,75 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="font-bold text-slate-400 block mb-1">Shop / Business Name</label>
+                  <label className="font-bold text-slate-700 block mb-1">Shop / Business Name</label>
                   <input
                     type="text"
                     required
                     value={shopName}
                     onChange={(e) => setShopName(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 font-bold"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
 
                 <div>
-                  <label className="font-bold text-slate-400 block mb-1">Admin Security PIN (4-Digits)</label>
+                  <label className="font-bold text-slate-700 block mb-1">Admin Security PIN (4-Digits)</label>
                   <div className="relative">
-                    <KeyRound className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-amber-400" />
+                    <KeyRound className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-amber-600" />
                     <input
                       type="text"
                       required
                       value={adminPin}
                       onChange={(e) => setAdminPin(e.target.value)}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-amber-400 font-mono font-extrabold text-sm"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-amber-700 font-mono font-extrabold text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="font-bold text-slate-400 block mb-1">Tagline / Subheading</label>
+                <label className="font-bold text-slate-700 block mb-1">Tagline / Subheading</label>
                 <input
                   type="text"
                   value={tagline}
                   onChange={(e) => setTagline(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="font-bold text-slate-400 block mb-1">Phone Number</label>
+                  <label className="font-bold text-slate-700 block mb-1">Phone Number</label>
                   <input
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
 
                 <div>
-                  <label className="font-bold text-slate-400 block mb-1">Shop Address</label>
+                  <label className="font-bold text-slate-700 block mb-1">Shop Address</label>
                   <input
                     type="text"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
 
                 <div>
-                  <label className="font-bold text-slate-400 block mb-1">Currency Symbol</label>
+                  <label className="font-bold text-slate-700 block mb-1">Currency Symbol</label>
                   <input
                     type="text"
                     value={currencySymbol}
                     onChange={(e) => setCurrencySymbol(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-extrabold"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-emerald-800 font-extrabold focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
               </div>
 
               {settingsSaved && (
-                <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-emerald-300 font-bold flex items-center space-x-2">
+                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 font-bold flex items-center space-x-2">
                   <Check className="w-4 h-4" />
                   <span>Admin settings and PIN saved successfully!</span>
                 </div>
@@ -817,7 +817,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               <button
                 type="submit"
-                className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-5 py-2.5 rounded-xl text-xs flex items-center space-x-1.5 shadow-md"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-5 py-2.5 rounded-xl text-xs flex items-center space-x-1.5 shadow-sm"
               >
                 <Save className="w-4 h-4" />
                 <span>Save All Admin Settings</span>
@@ -827,14 +827,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
 
           {/* Reset Demo Data Danger Zone */}
-          <div className="lg:col-span-4 bg-slate-900 border border-rose-500/30 rounded-2xl p-6 shadow-lg space-y-3 flex flex-col justify-between">
+          <div className="lg:col-span-4 bg-white border border-rose-200 rounded-2xl p-6 shadow-sm space-y-3 flex flex-col justify-between">
             <div>
-              <div className="flex items-center space-x-2 text-rose-400 font-bold text-xs uppercase tracking-wider mb-2">
+              <div className="flex items-center space-x-2 text-rose-700 font-bold text-xs uppercase tracking-wider mb-2">
                 <AlertTriangle className="w-4 h-4" />
                 <span>Danger Zone • डेटा रिसेट</span>
               </div>
-              <h4 className="font-extrabold text-slate-100 text-sm">Reset Sample Products & Sales</h4>
-              <p className="text-xs text-slate-400 mt-1">
+              <h4 className="font-extrabold text-slate-900 text-sm">Reset Sample Products & Sales</h4>
+              <p className="text-xs text-slate-600 mt-1">
                 Restores default sample fertilizers, pesticides, seeds, and initial 12-month sales logs.
               </p>
             </div>
@@ -845,7 +845,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   onResetData();
                 }
               }}
-              className="w-full bg-rose-500/10 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-2 transition-colors"
+              className="w-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-2 transition-colors"
             >
               <RotateCcw className="w-4 h-4" />
               <span>Reset to Default Demo Data</span>

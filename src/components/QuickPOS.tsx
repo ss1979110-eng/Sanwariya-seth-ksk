@@ -236,24 +236,24 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
     <div className="space-y-6">
       
       {/* Title Header & Mode Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900 p-5 rounded-2xl border border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
         <div>
-          <div className="flex items-center space-x-2 text-emerald-400 font-bold text-xs uppercase tracking-wider mb-1">
+          <div className="flex items-center space-x-2 text-emerald-700 font-extrabold text-xs uppercase tracking-wider mb-1">
             <ShoppingBag className="w-4 h-4" />
             <span>Point of Sale • त्वरित काउंटर बिक्री</span>
           </div>
-          <h2 className="text-xl font-bold text-slate-100">Record New Sale Transaction</h2>
-          <p className="text-xs text-slate-400">Choose item-wise billing or enter direct total sale in Rupees for any exact date.</p>
+          <h2 className="text-xl font-black text-slate-900">Record New Sale Transaction</h2>
+          <p className="text-xs text-slate-600">Choose item-wise billing or enter direct total sale in Rupees for any exact date.</p>
         </div>
 
         {/* Sale Mode Toggle Switch */}
-        <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700 shrink-0">
+        <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0">
           <button
             onClick={() => setSaleMode('itemized')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
               saleMode === 'itemized'
-                ? 'bg-emerald-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Item-wise Bill (सामग्री अनुसार)
@@ -262,8 +262,8 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
             onClick={() => setSaleMode('direct')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
               saleMode === 'direct'
-                ? 'bg-emerald-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Direct ₹ Total Sale (केवल कुल बिक्री)
@@ -273,14 +273,14 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
 
       {saleMode === 'direct' ? (
         /* Direct Total Sale Entry Form */
-        <div className="bg-slate-900 border border-emerald-500/30 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto space-y-6">
-          <div className="border-b border-slate-800 pb-4">
-            <div className="flex items-center space-x-2 text-emerald-400 font-bold text-xs uppercase tracking-wider mb-1">
+        <div className="bg-white border border-emerald-300 rounded-2xl p-6 shadow-md max-w-2xl mx-auto space-y-6">
+          <div className="border-b border-slate-100 pb-4">
+            <div className="flex items-center space-x-2 text-emerald-700 font-extrabold text-xs uppercase tracking-wider mb-1">
               <Sparkles className="w-4 h-4" />
               <span>Quick Lump-Sum Entry • सीधी कुल बिक्री दर्ज करें</span>
             </div>
-            <h3 className="text-lg font-black text-white">Direct Total Sale in Rupees (₹)</h3>
-            <p className="text-xs text-slate-400 mt-1">
+            <h3 className="text-lg font-black text-slate-900">Direct Total Sale in Rupees (₹)</h3>
+            <p className="text-xs text-slate-600 mt-1">
               Record total revenue directly without selecting items. It will instantly update all real-time graphs and daily totals for the exact date.
             </p>
           </div>
@@ -291,11 +291,11 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
               
               {/* Total Sale Amount Input */}
               <div className="space-y-1.5">
-                <label className="text-xs font-extrabold uppercase tracking-wider text-emerald-400 flex items-center space-x-1">
+                <label className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 flex items-center space-x-1">
                   <span>Total Sale Amount (कुल राशि ₹) *</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-400 font-black text-lg">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-700 font-black text-lg">
                     {settings.currencySymbol}
                   </span>
                   <input
@@ -306,15 +306,15 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                     value={directAmount}
                     onChange={(e) => setDirectAmount(e.target.value)}
                     placeholder="Enter total sale in ₹"
-                    className="w-full bg-slate-950 border border-emerald-500/50 rounded-xl pl-9 pr-3 py-3 text-lg font-black text-emerald-400 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full bg-slate-50 border border-emerald-400 rounded-xl pl-9 pr-3 py-3 text-lg font-black text-emerald-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
               </div>
 
               {/* Exact Date Picker */}
               <div className="space-y-1.5">
-                <label className="text-xs font-extrabold uppercase tracking-wider text-emerald-400 flex items-center space-x-1">
-                  <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                <label className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 flex items-center space-x-1">
+                  <Calendar className="w-3.5 h-3.5 text-emerald-700" />
                   <span>Sale Date (तारीख चुनें) *</span>
                 </label>
                 <input
@@ -322,7 +322,7 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                   required
                   value={saleDate}
                   onChange={(e) => setSaleDate(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-3 text-sm text-slate-100 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-3 text-sm text-slate-900 font-mono font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
                 />
               </div>
 
@@ -330,15 +330,15 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
 
             {/* Category Selector for Graph & Analytics */}
             <div className="space-y-1.5">
-              <label className="text-xs font-extrabold uppercase tracking-wider text-slate-300">
+              <label className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
                 Category for Graph Analytics (श्रेणी चुनें)
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
-                  { id: 'fertilizers', name: 'Fertilizers (उर्वरक)', icon: <Sprout className="w-4 h-4 text-emerald-400" /> },
-                  { id: 'pesticides', name: 'Pesticides (कीटनाशक)', icon: <ShieldAlert className="w-4 h-4 text-rose-400" /> },
-                  { id: 'seeds', name: 'Seeds (बीज)', icon: <Wheat className="w-4 h-4 text-amber-400" /> },
-                  { id: 'other', name: 'General Agri (अन्य)', icon: <Wrench className="w-4 h-4 text-blue-400" /> },
+                  { id: 'fertilizers', name: 'Fertilizers (उर्वरक)', icon: <Sprout className="w-4 h-4 text-emerald-600" /> },
+                  { id: 'pesticides', name: 'Pesticides (कीटनाशक)', icon: <ShieldAlert className="w-4 h-4 text-rose-600" /> },
+                  { id: 'seeds', name: 'Seeds (बीज)', icon: <Wheat className="w-4 h-4 text-amber-600" /> },
+                  { id: 'other', name: 'General Agri (अन्य)', icon: <Wrench className="w-4 h-4 text-blue-600" /> },
                 ].map((cat) => (
                   <button
                     key={cat.id}
@@ -346,8 +346,8 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                     onClick={() => setDirectCategory(cat.id as ProductCategory)}
                     className={`p-3 rounded-xl border flex items-center space-x-2 text-xs font-bold transition-all ${
                       directCategory === cat.id
-                        ? 'bg-emerald-950 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/50'
-                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+                        ? 'bg-emerald-50 border-emerald-500 text-emerald-900 ring-2 ring-emerald-500/30'
+                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                     }`}
                   >
                     {cat.icon}
@@ -360,29 +360,29 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
             {/* Customer Details Optional Row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-400">Customer Name (optional)</label>
+                <label className="text-[11px] font-bold text-slate-600">Customer Name (optional)</label>
                 <div className="relative">
-                  <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     placeholder="Walk-in Cash Sale"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-400">Mobile Number (optional)</label>
+                <label className="text-[11px] font-bold text-slate-600">Mobile Number (optional)</label>
                 <div className="relative">
-                  <Phone className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <Phone className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
                     value={customerPhone}
                     onChange={(e) => setCustomerPhone(e.target.value)}
                     placeholder="Mobile number"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
               </div>
@@ -390,7 +390,7 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
 
             {/* Payment Mode Selector */}
             <div className="space-y-1.5">
-              <label className="text-xs font-extrabold uppercase tracking-wider text-slate-300">
+              <label className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
                 Payment Mode (भुगतान का प्रकार)
               </label>
               <div className="grid grid-cols-4 gap-2">
@@ -401,8 +401,8 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                     onClick={() => setPaymentMethod(mode)}
                     className={`py-2 px-2 rounded-xl text-xs font-extrabold border transition-all text-center ${
                       paymentMethod === mode
-                        ? 'bg-emerald-600 border-emerald-500 text-white shadow'
-                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+                        ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm'
+                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                     }`}
                   >
                     {mode}
@@ -413,13 +413,13 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
 
             {/* Notes Input */}
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-400">Notes / Remarks (optional)</label>
+              <label className="text-[11px] font-bold text-slate-600">Notes / Remarks (optional)</label>
               <input
                 type="text"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="e.g. Counter direct bulk sale entry"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
@@ -427,7 +427,7 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
             <div className="pt-2">
               <button
                 type="submit"
-                className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-3.5 rounded-xl font-black text-sm flex items-center justify-center space-x-2 shadow-xl shadow-emerald-950 transition-all active:scale-95"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-black text-sm flex items-center justify-center space-x-2 shadow-md transition-all active:scale-95"
               >
                 <CheckCircle2 className="w-5 h-5" />
                 <span>Record Direct Sale & Update Graphs (₹ बिक्री दर्ज करें)</span>
@@ -444,13 +444,13 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
           <div className="lg:col-span-7 space-y-4">
             
             {/* Category Filter & Search Bar */}
-            <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center space-x-1.5 overflow-x-auto pb-1">
                   <button
                     onClick={() => setSelectedCategory('all')}
                     className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                      selectedCategory === 'all' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                      selectedCategory === 'all' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
                     All
@@ -458,7 +458,7 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                   <button
                     onClick={() => setSelectedCategory('fertilizers')}
                     className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center space-x-1 transition-all ${
-                      selectedCategory === 'fertilizers' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                      selectedCategory === 'fertilizers' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
                     <Sprout className="w-3.5 h-3.5" />
@@ -467,7 +467,7 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                   <button
                     onClick={() => setSelectedCategory('pesticides')}
                     className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center space-x-1 transition-all ${
-                      selectedCategory === 'pesticides' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                      selectedCategory === 'pesticides' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
                     <ShieldAlert className="w-3.5 h-3.5" />
@@ -476,7 +476,7 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                   <button
                     onClick={() => setSelectedCategory('seeds')}
                     className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center space-x-1 transition-all ${
-                      selectedCategory === 'seeds' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                      selectedCategory === 'seeds' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
                     <Wheat className="w-3.5 h-3.5" />
@@ -491,7 +491,7 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Quick search..."
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-3 py-1 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-lg pl-8 pr-3 py-1 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
               </div>
@@ -509,35 +509,35 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                     onClick={() => !isOutOfStock && addToCart(p)}
                     className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
                       isOutOfStock
-                        ? 'bg-slate-900/40 border-slate-800/60 opacity-60 cursor-not-allowed'
+                        ? 'bg-slate-50/60 border-slate-200/80 opacity-60 cursor-not-allowed'
                         : inCart
-                        ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500'
-                        : 'bg-slate-900 border-slate-800 hover:border-slate-700 hover:bg-slate-800/50'
+                        ? 'bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500'
+                        : 'bg-white border border-slate-200 hover:border-emerald-400 hover:shadow-sm'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between text-xs mb-1">
-                        <span className="flex items-center space-x-1 font-semibold text-slate-400">
+                        <span className="flex items-center space-x-1 font-semibold text-slate-600">
                           {getCategoryIcon(p.category)}
                           <span className="capitalize text-[10px]">{p.category}</span>
                         </span>
-                        <span className="text-[10px] text-slate-400 font-bold bg-slate-800 px-1.5 py-0.5 rounded">
+                        <span className="text-[10px] text-slate-600 font-bold bg-slate-100 px-1.5 py-0.5 rounded">
                           {p.brand || 'Agri'}
                         </span>
                       </div>
 
-                      <h4 className="font-bold text-slate-100 text-xs leading-tight mb-1">
+                      <h4 className="font-extrabold text-slate-900 text-xs leading-tight mb-1">
                         {p.name}
                       </h4>
-                      <p className="text-[11px] text-slate-400">{p.unit}</p>
+                      <p className="text-[11px] text-slate-500">{p.unit}</p>
                     </div>
 
-                    <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-800/80">
+                    <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-100">
                       <div>
-                        <span className="text-sm font-extrabold text-emerald-400">
+                        <span className="text-sm font-black text-emerald-700">
                           {settings.currencySymbol}{p.rate}
                         </span>
-                        <span className="text-[10px] text-slate-400 block">Stock: {p.stock}</span>
+                        <span className="text-[10px] text-slate-500 block">Stock: {p.stock}</span>
                       </div>
 
                       <button
@@ -549,8 +549,8 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                         }}
                         className={`p-1.5 rounded-lg text-xs font-bold transition-all ${
                           inCart
-                            ? 'bg-emerald-500 text-slate-950'
-                            : 'bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white'
+                            ? 'bg-emerald-600 text-white'
+                            : 'bg-slate-100 hover:bg-emerald-600 text-slate-700 hover:text-white'
                         }`}
                       >
                         {inCart ? `Selected (${inCart.quantity})` : '+ Add'}
@@ -564,22 +564,22 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
           </div>
 
           {/* Right Column: Active Cart & Checkout Panel */}
-          <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-5 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between space-y-4">
             <div>
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div className="flex items-center space-x-2">
-                  <Receipt className="w-5 h-5 text-emerald-400" />
-                  <h3 className="font-bold text-slate-100 text-base">Current Bill Items</h3>
+                  <Receipt className="w-5 h-5 text-emerald-700" />
+                  <h3 className="font-extrabold text-slate-900 text-base">Current Bill Items</h3>
                 </div>
-                <span className="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-2 py-0.5 rounded border border-emerald-500/30">
+                <span className="text-xs bg-emerald-50 text-emerald-800 font-bold px-2 py-0.5 rounded border border-emerald-200">
                   {cart.length} Item(s)
                 </span>
               </div>
 
               {/* Cart Items List */}
               {cart.length === 0 ? (
-                <div className="text-center py-10 text-slate-500 text-xs">
-                  <ShoppingBag className="w-8 h-8 mx-auto mb-2 text-slate-600" />
+                <div className="text-center py-10 text-slate-400 text-xs">
+                  <ShoppingBag className="w-8 h-8 mx-auto mb-2 text-slate-300" />
                   Select items from the catalog on the left to build customer bill.
                 </div>
               ) : (
@@ -587,42 +587,42 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                   {cart.map((item) => (
                     <div
                       key={item.productId}
-                      className="flex items-center justify-between bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/60 text-xs"
+                      className="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs"
                     >
                       <div className="flex-1 pr-2">
-                        <div className="font-bold text-slate-200 line-clamp-1">{item.productName}</div>
-                        <div className="text-[11px] text-slate-400">
+                        <div className="font-bold text-slate-900 line-clamp-1">{item.productName}</div>
+                        <div className="text-[11px] text-slate-500">
                           {settings.currencySymbol}{item.rate} × {item.quantity} {item.unit}
                         </div>
                       </div>
 
                       <div className="flex items-center space-x-2">
-                        <div className="flex items-center border border-slate-700 rounded-lg overflow-hidden bg-slate-900">
+                        <div className="flex items-center border border-slate-300 rounded-lg overflow-hidden bg-white">
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.productId, item.quantity - 1)}
-                            className="px-2 py-0.5 text-slate-300 hover:bg-slate-800 font-bold"
+                            className="px-2 py-0.5 text-slate-700 hover:bg-slate-100 font-bold"
                           >
                             -
                           </button>
-                          <span className="px-2 py-0.5 text-slate-100 font-bold">{item.quantity}</span>
+                          <span className="px-2 py-0.5 text-slate-900 font-bold">{item.quantity}</span>
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                            className="px-2 py-0.5 text-slate-300 hover:bg-slate-800 font-bold"
+                            className="px-2 py-0.5 text-slate-700 hover:bg-slate-100 font-bold"
                           >
                             +
                           </button>
                         </div>
 
-                        <span className="font-extrabold text-emerald-400 min-w-[50px] text-right">
+                        <span className="font-black text-emerald-700 min-w-[50px] text-right">
                           {settings.currencySymbol}{item.total}
                         </span>
 
                         <button
                           type="button"
                           onClick={() => removeFromCart(item.productId)}
-                          className="text-slate-500 hover:text-rose-400 transition-colors p-1"
+                          className="text-slate-400 hover:text-rose-600 transition-colors p-1"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -634,12 +634,12 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
             </div>
 
             {/* Customer Details Form & Total */}
-            <form onSubmit={handleItemizedCheckout} className="space-y-3 pt-3 border-t border-slate-800">
+            <form onSubmit={handleItemizedCheckout} className="space-y-3 pt-3 border-t border-slate-100">
               
               {/* Customer Inputs */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
                     Customer Name
                   </label>
                   <div className="relative">
@@ -649,13 +649,13 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
                       placeholder="Farmer Name"
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-2 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-lg pl-8 pr-2 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
                     Mobile Number
                   </label>
                   <div className="relative">
@@ -665,7 +665,7 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       placeholder="Phone number"
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-2 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-lg pl-8 pr-2 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>
                 </div>
@@ -674,8 +674,8 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
               {/* Sale Date & Payment Mode */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center space-x-1 mb-1">
-                    <Calendar className="w-3 h-3 text-emerald-400" />
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 flex items-center space-x-1 mb-1">
+                    <Calendar className="w-3 h-3 text-emerald-700" />
                     <span>Sale Date (तारीख)</span>
                   </label>
                   <div className="relative">
@@ -684,13 +684,13 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                       value={saleDate}
                       onChange={(e) => setSaleDate(e.target.value)}
                       required
-                      className="w-full bg-slate-800 border border-emerald-500/40 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+                      className="w-full bg-slate-50 border border-emerald-400 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 font-mono font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
                     Payment Mode
                   </label>
                   <div className="grid grid-cols-2 gap-1">
@@ -701,8 +701,8 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                         onClick={() => setPaymentMethod(mode)}
                         className={`py-1 px-1 rounded text-[10px] font-bold border transition-all text-center truncate ${
                           paymentMethod === mode
-                            ? 'bg-emerald-600 border-emerald-500 text-white'
-                            : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                            ? 'bg-emerald-600 border-emerald-600 text-white'
+                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                         }`}
                       >
                         {mode}
@@ -713,12 +713,12 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
               </div>
 
               {/* Grand Total Display */}
-              <div className="bg-slate-800/90 p-3 rounded-xl border border-slate-700 flex items-center justify-between mt-2">
+              <div className="bg-emerald-50/60 p-3 rounded-xl border border-emerald-200 flex items-center justify-between mt-2">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 block">
                     Grand Total Amount
                   </span>
-                  <span className="text-2xl font-black text-emerald-400">
+                  <span className="text-2xl font-black text-emerald-800">
                     {settings.currencySymbol}{cartTotal.toLocaleString()}
                   </span>
                 </div>
@@ -728,8 +728,8 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
                   disabled={cart.length === 0}
                   className={`px-5 py-3 rounded-xl font-extrabold text-xs flex items-center space-x-2 transition-transform active:scale-95 ${
                     cart.length === 0
-                      ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                      : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-950'
+                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                      : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md'
                   }`}
                 >
                   <CheckCircle2 className="w-4 h-4" />
@@ -745,40 +745,40 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
 
       {/* Success Receipt Popup Card */}
       {recentReceipt && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-emerald-500/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center space-x-2 text-emerald-400">
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center space-x-2 text-emerald-700">
                 <Sparkles className="w-5 h-5" />
-                <h3 className="font-extrabold text-base text-slate-100">Sale Recorded Successfully</h3>
+                <h3 className="font-extrabold text-base text-slate-900">Sale Recorded Successfully</h3>
               </div>
-              <span className="text-xs text-slate-400 font-mono">{recentReceipt.billNumber}</span>
+              <span className="text-xs text-slate-500 font-mono font-bold">{recentReceipt.billNumber}</span>
             </div>
 
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
-              <div className="flex justify-between text-slate-300">
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 text-xs">
+              <div className="flex justify-between text-slate-700">
                 <span>Customer:</span>
-                <span className="font-bold text-slate-100">{recentReceipt.customerName}</span>
+                <span className="font-bold text-slate-900">{recentReceipt.customerName}</span>
               </div>
-              <div className="flex justify-between text-slate-300">
+              <div className="flex justify-between text-slate-700">
                 <span>Date:</span>
-                <span className="font-bold text-slate-100">{recentReceipt.date}</span>
+                <span className="font-bold text-slate-900">{recentReceipt.date}</span>
               </div>
-              <div className="flex justify-between text-slate-300">
+              <div className="flex justify-between text-slate-700">
                 <span>Payment Mode:</span>
-                <span className="font-bold text-emerald-400">{recentReceipt.paymentMethod}</span>
+                <span className="font-bold text-emerald-700">{recentReceipt.paymentMethod}</span>
               </div>
 
-              <div className="border-t border-slate-800 my-2 pt-2 space-y-1">
+              <div className="border-t border-slate-200 my-2 pt-2 space-y-1">
                 {recentReceipt.items.map((it) => (
-                  <div key={it.productId} className="flex justify-between text-slate-400 text-[11px]">
+                  <div key={it.productId} className="flex justify-between text-slate-600 text-[11px]">
                     <span>{it.productName} ({it.quantity} × {it.unit})</span>
-                    <span className="font-mono text-slate-200">{settings.currencySymbol}{it.total}</span>
+                    <span className="font-mono text-slate-900 font-bold">{settings.currencySymbol}{it.total}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="flex justify-between border-t border-slate-800 pt-2 text-sm font-extrabold text-emerald-400">
+              <div className="flex justify-between border-t border-slate-200 pt-2 text-sm font-black text-emerald-800">
                 <span>Total Amount Paid:</span>
                 <span>{settings.currencySymbol}{recentReceipt.totalAmount.toLocaleString()}</span>
               </div>
@@ -787,14 +787,14 @@ export const QuickPOS: React.FC<QuickPOSProps> = ({
             <div className="flex items-center space-x-3 pt-2">
               <button
                 onClick={() => window.print()}
-                className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 border border-slate-700"
+                className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 border border-slate-300"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print Bill</span>
               </button>
               <button
                 onClick={() => setRecentReceipt(null)}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl font-bold text-xs"
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold text-xs shadow-sm"
               >
                 Close
               </button>
